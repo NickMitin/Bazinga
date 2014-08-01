@@ -3,6 +3,7 @@ conf/generator.conf
 conf/license.conf
 conf/contentProvider.conf
 conf/cms/cms.json
+conf/cms/users/module.json
 classes/bmSession.php
 classes/bmUser.php
 classes/bmApplication.php

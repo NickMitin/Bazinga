@@ -1,0 +1,17 @@
+{
+	"dataObject": "user",
+	"titles": {
+		"email": "E-mail",
+		"password": "Пароль",
+		"type": "Тип"
+	},
+	"list": {
+		"columns": ["email", "type"]
+	},
+	"form": {
+		"fields": {
+			"email": true,
+			"password": true
+		}
+	}
+}

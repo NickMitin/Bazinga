@@ -1,4 +1,8 @@
 {
 	"structure": {
+		"users": {
+			"title": "Пользователи",
+			"icon": "child"
+		}
 	}
 }
