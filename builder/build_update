@@ -15,7 +15,7 @@
   $result = array();
   foreach ($contents as $file)
   {
-    if (mb_strpos($file, '.conf') === false && mb_strpos($file, 'controllers/') === false)
+    if (mb_strpos($file, 'conf/') === false && mb_strpos($file, 'controllers/') === false)
     {
       if (mb_strpos($file, 'lib/') !== false)
       {
@@ -31,18 +31,19 @@
     }
   }
   file_put_contents('templist.txt', implode("\n", $result));
+  chdir("../");
   if (!$useLib)
   {
-    unlink('www/paw_update.zip');
-    `cat templist.txt | zip ~/www/paw_update.zip -@`;
+    @unlink('www/paw_update.zip');
+    `cat builder/templist.txt | zip ./www/paw_update.zip -@`;
     echo 'P@W update built.';
   }
   else
   {
-    unlink('www/paw_update_lib.zip');
-    `cat templist.txt | zip ~/www/paw_update_lib.zip -@`;
+    @unlink('www/paw_update_lib.zip');
+    `cat builder/templist.txt | zip ./www/paw_update_lib.zip -@`;
     echo 'P@W update with lib built.';
   }
-  unlink('templist.txt');
+  unlink('builder/templist.txt');
 
 ?>
