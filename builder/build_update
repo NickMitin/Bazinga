@@ -15,7 +15,7 @@
   $result = array();
   foreach ($contents as $file)
   {
-    if (mb_strpos($file, 'conf/') === false && mb_strpos($file, 'controllers/') === false)
+    if (mb_strpos($file, 'conf/') === false && mb_strpos($file, 'classes/') === false || mb_strpos($file, 'classes/bmCMSPage.php') !== false)
     {
       if (mb_strpos($file, 'lib/') !== false)
       {

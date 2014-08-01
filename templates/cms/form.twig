@@ -1,0 +1,67 @@
+{% extends "_base.twig" %}
+
+	{% block moduleContent %}
+		<div class="cms-module-form">
+			<form action="./" method="post">
+				<table>
+					{% for field,fieldParams in fields %}
+						<tr>
+							<td class="caption">
+								<div class="caption">{{ fieldParams.title }}</div>
+							</td>
+							<td class="field">
+								{% if fieldParams.type == 'password' %}
+									<input type="password" class="text password" name="cms-form-item[{{ field }}]"/>
+								{% elseif fieldParams.type == 'checkbox' %}
+									<label>
+										<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData[field] %}checked{% endif %} />
+									</label>
+								{% elseif fieldParams.type == 'datetime' %}
+									{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
+									<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData[field] }}"/>
+								{% elseif fieldParams.type == 'text' %}
+									<textarea name="cms-form-item[{{ field }}]">{{ objectData[field] }}</textarea>
+								{% elseif fieldParams.type == 'custom' %}
+									{% autoescape false %}
+									{{ fieldParams.html }}
+									{% endautoescape %}
+								{% elseif fieldParams.type == 'relation' %}
+									{% if fieldParams.cardinality == 'one' %}
+										<select class="text" name="cms-form-item-relation[{{ field }}]">
+											<option></option>
+											{% for id,name in fieldParams.items %}
+												<option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
+													{{ name }}
+												</option>
+											{% endfor %}
+										</select>
+									{% else %}
+										<ul>
+											{% for id,name in fieldParams.items %}
+												<li>
+													<label>
+														<input type="checkbox" name="cms-form-item-relation[{{ field }}][{{ id }}]" value="1" {% if id in fieldParams.bindedItems %}checked{% endif %} />
+														{{ name }}
+													</label>
+												</li>
+											{% endfor %}
+										</ul>
+									{% endif %}
+								{% else %}
+									<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData[field] }}"/>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+					<tr>
+						<td></td>
+						<td>
+							<div class="form-buttons">
+								<input type="submit" value="Save"/>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	{% endblock moduleContent %}

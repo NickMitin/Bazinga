@@ -1,0 +1,37 @@
+{% extends "_base.twig" %}
+
+	{% block moduleContent %}
+		<div class="cms-module-list">
+			<input type="button" value="+" class="add-new-item">
+			<table>
+				<thead>
+				<tr>
+					<th>ID</th>
+					{% for column, columnInfo in columns %}
+						<th>
+							{{ columnInfo.title }}
+						</th>
+					{% endfor %}
+				</tr>
+				</thead>
+				<tbody>
+				{% for object in objects %}
+					<tr>
+						<td><a href='./{{ object.identifier }}/'>{{ object.identifier }}</a></td>
+						{% for column, columnInfo in columns %}
+							<td>
+								{% if columnInfo.type == 'text' %}
+									{{ object[column]|slice(0, 20) }}
+								{% else %}
+								<a href='./{{ object.identifier }}/'>{{ attribute(object, column) }}</a>
+								{% endif %}
+							</td>
+						{% endfor %}
+						<td>[X]</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+
+			</table>
+		</div>
+	{% endblock moduleContent %}

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8"/>
+	<title>Досуг.дети CMS</title>
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700|Open+Sans:400italic,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/styles/cms/fontawesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="/styles/cms/reset.css"/>
+	<link rel="stylesheet" href="/styles/cms/common.css"/>
+	<link rel="stylesheet" href="/styles/cms/base.css"/>
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="/scripts/cms/cms.js"></script>
+</head>
+<body class="cms-page">
+<header>
+	<ul class="top-menu clearfix">
+		{% for sectionName, sectionInfo in cmsStructure %}
+			<li {% if currentPathSections[1] == sectionName %}class="active"{% endif %} >
+				<a href="/cms/{{ sectionName }}/">
+					{% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
+					{{ sectionInfo.title }}
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% if cmsStructure[currentPathSections[1]].sections %}
+		<ul class="sub-menu clearfix">
+			{% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[1]].sections %}
+				<li {% if currentPathSections[2] == subSectionName %}class="active"{% endif %} >
+					<a href="/cms/{{ currentPathSections[1] }}/{{ subSectionName }}/">
+						{% if subSectionInfo.icon %}<i class="fa fa-fw fa-{{ subSectionInfo.icon }}"></i>{% endif %}
+						{{ subSectionInfo.title }}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</header>
+<div class="module-content">
+	{% block moduleContent %}
+	{% endblock moduleContent %}
+</div>
+</body>
+</html>
