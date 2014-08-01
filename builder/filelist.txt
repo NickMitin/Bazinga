@@ -114,6 +114,7 @@ sql.sql
 composer.json
 classes/bmCMSPage.php
 modules/cms/default.php
+modules/cms/index.php
 templates/cms
 templates/cms/_base.twig
 templates/cms/form.twig
