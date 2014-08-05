@@ -48,6 +48,10 @@ function pawAutoload($className)
 		{
 			require_once(projectRoot . '/lib/' . $className . '.php');
 		}
+		elseif (file_exists(projectRoot . '/migration/' . $className . '.php'))
+		{
+			require_once(projectRoot . '/migration/' . $className . '.php');
+		}
 	}
 }
 
@@ -74,6 +78,9 @@ require($_SERVER['DOCUMENT_ROOT'] . '/../conf/application.conf');
 require($_SERVER['DOCUMENT_ROOT'] . '/../conf/local.conf');
 
 
-$application = new bmApplication(null);
+if (!defined('BM_CONSOLE'))
+{
+	$application = new bmApplication(null);
+}
 
-?>
+

@@ -1,0 +1,31 @@
+<?php
+
+/**
+{$commit}
+ * Date: {$date}
+ * Time: {$time}
+ */
+class {$nameClass} extends bmIMigrate
+{
+
+	public function up()
+	{
+		\$messenge = \$this->validateObjects([{$object}]);
+		if (\$messenge !== true)
+		{
+			return \$messenge;
+		}
+
+		\$messenge = \$this->validateFields([{$field}]);
+
+		if (\$messenge !== true)
+		{
+			return \$messenge;
+		}
+
+		{$dbUp}
+
+		return true;
+	}
+
+}

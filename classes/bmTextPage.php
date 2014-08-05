@@ -1,7 +1,7 @@
 <?php 
   
   /*
-  * Copyright (c) 2009, "The Blind Mice Studio"
+  * Copyright (c) 2014, "The Blind Mice Studio"
   * All rights reserved.
   * 
   * Redistribution and use in source and binary forms, with or without
@@ -28,26 +28,41 @@
   * 
   */
 
-  final class bmUser extends bmDataObject
+  final class bmTextPage extends bmDataObject
   {
     public function __construct($application, $parameters = array())
     {
       /*FF::AC::MAPPING::{*/
 
-      $this->objectName = 'user';
+      $this->objectName = 'textPage';
       $this->map = array_merge($this->map, array(
-				'email' => array(
-					'fieldName' => 'email',
+				'title' => array(
+					'fieldName' => 'title',
 					'dataType' => BM_VT_STRING,
-					'defaultValue' => '0'
+					'defaultValue' => ''
 				),
-				'password' => array(
-					'fieldName' => 'password',
-					'dataType' => BM_VT_PASSWORD,
-					'defaultValue' => '0'
+				'keywords' => array(
+					'fieldName' => 'keywords',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
 				),
-				'type' => array(
-					'fieldName' => 'type',
+				'description' => array(
+					'fieldName' => 'description',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
+				),
+				'content' => array(
+					'fieldName' => 'content',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
+				),
+				'url' => array(
+					'fieldName' => 'url',
+					'dataType' => BM_VT_STRING,
+					'defaultValue' => ''
+				),
+				'status' => array(
+					'fieldName' => 'status',
 					'dataType' => BM_VT_INTEGER,
 					'defaultValue' => 0
 				)
@@ -78,6 +93,27 @@
     
 
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
+    
+    /*FF::AC::DELETE_FUNCTION::{*/        
+        
+    public function delete()
+    {
+      
+      
+      
+      
+      $this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']); 
+      
+      $sql = "DELETE FROM 
+                `textPage` 
+              WHERE 
+                `id` = " . $this->properties['identifier'] . ";
+              ";
+      
+      $this->application->dataLink->query($sql);
+    }
+    
+    /*FF::AC::DELETE_FUNCTION::}*/
   }
   
 ?>
