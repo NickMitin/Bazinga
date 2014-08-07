@@ -98,6 +98,10 @@ final class bmImage extends bmDataObject
 
 	/*FF::AC::DELETE_FUNCTION::{*/
 
+
+	/*FF::AC::DELETE_FUNCTION::}*/
+
+
 	public function delete($objectName, $objectId, $objectGroup)
 	{
 		$objectGroup = $this->application->dataLink->quoteSmart($objectGroup);
@@ -106,8 +110,8 @@ final class bmImage extends bmDataObject
 		$this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']);
 
 		$sql = "DELETE FROM
-                `image` 
-              WHERE 
+                `image`
+              WHERE
                 `id` = " . $this->properties['identifier'] . ";
               ";
 		$this->application->dataLink->query($sql);
@@ -122,9 +126,6 @@ final class bmImage extends bmDataObject
               ";
 		$this->application->dataLink->query($sql);
 	}
-
-	/*FF::AC::DELETE_FUNCTION::}*/
-
 
 	public function addLinkObject($object, $objectId, $group)
 	{
