@@ -171,6 +171,7 @@ class bmSaveReference extends bmCustomRemoteProcedure
 	public function execute()
 	{
 		$dataLink = $this->application->dataLink;
+		$oldReferenceField = $itemsMapObject = [];
 
 		if ($this->referenceId != 0)
 		{
@@ -230,6 +231,7 @@ class bmSaveReference extends bmCustomRemoteProcedure
 					}
 
 					$referenceField = new bmReferenceField($this->application, array('identifier' => $item->identifier), $migration);
+					$oldReferenceField[$referenceField->fieldName] = clone $referenceField;
 					$referenceField->propertyName = $item->propertyName;
 					$referenceField->fieldName = $item->fieldName;
 					$referenceField->dataType = $item->dataType;
@@ -238,6 +240,7 @@ class bmSaveReference extends bmCustomRemoteProcedure
 
 					if ($item->referencedObjectId != 0)
 					{
+						$itemsMapObject[$item->fieldName] = $item->referencedObjectId;
 						$referenceField->setReferencedObject($item->referencedObjectId);
 					}
 
@@ -253,16 +256,16 @@ class bmSaveReference extends bmCustomRemoteProcedure
 					switch ($action)
 					{
 						case 'add':
-							$referenceMap->addField($item->identifier, $item->referencedObjectType);
+							$referenceMap->addField($item->identifier, $item->referencedObjectType, $itemsMapObject);
 							break;
 						case 'delete':
 							$referenceMap->removeField($item->identifier);
 							break;
 						case 'change':
-							$referenceMap->renameField($item->identifier, $item->oldFieldName);
+							$referenceMap->renameField($item->identifier, $item->oldFieldName, $oldReferenceField);
 							break;
 						case 'changeType':
-							$referenceMap->changeFieldType($item->identifier, $item->referencedObjectType);
+							$referenceMap->changeFieldType($item->identifier, $item->referencedObjectType, $oldReferenceField);
 							break;
 					}
 				}

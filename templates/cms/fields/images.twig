@@ -1,0 +1,20 @@
+<div class="list-image">
+	{% for image in objectData.getObjectImages(field) %}
+		<div class="list-image-item">
+			<div class="list-image-item-block">
+				<i class="list-image-item-remove fa fa-minus-square-o"></i>
+				<a href="{{ image.image.getImage(image.group) }}" target="_blank"><img src="{{ image.image.getImage(image.group, 'h100') }}" /></a>
+				<input type="hidden" value="{{ image.group }}" name="cms-form-item[{{ image.group }}]" />
+				<input type="hidden" value="{{ image.image.getProperty('identifier') }}" name="cms-image-id[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+				<input type="hidden" class="list-image-item-remove-input" value="0" name="cms-image-remove[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+				<input type="text" placeholder="Описание" class="text" value="{{ image.image.getProperty('caption') }}" name="cms-image-caption[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+			</div>
+			<div class="list-image-item-remove-text"><a href="#">Востановить</a></div>
+		</div>
+	{% endfor %}
+<hr />
+</div>
+
+<div class="form-field-image">
+	<input type="file" multiple="on" accept="image/gif, image/jpeg, image/png" class="text" name="cms-form-images[{{ field }}][]" />
+</div>

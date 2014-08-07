@@ -153,7 +153,7 @@ abstract class bmCMSPage extends bmHTMLPage
 		if ($object)
 		{
 			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
-			$this->templateVars['objectData'] = $object->toArray();
+			$this->templateVars['objectData'] = $object;
 
 			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
 			foreach ($this->templateVars['fields'] as $field => $fieldInfo)
@@ -212,6 +212,34 @@ abstract class bmCMSPage extends bmHTMLPage
 						break;
 					case 'checkbox':
 						$object->{$field} = !!intval($value);
+						break;
+					case 'images':
+						if (array_key_exists('cms-form-images', $_FILES))
+						{
+							$errors = $object->addObjectImages($field, $_FILES['cms-form-images']);
+						}
+						if (
+							array_key_exists('cms-image-id', $_POST)
+							&& array_key_exists($field, $_POST['cms-image-id'])
+						)
+						{
+							foreach ($_POST['cms-image-id'][$value] as $key => $imageId)
+							{
+								$imageId = intval($imageId);
+								$imageCaption = $_POST['cms-image-caption'][$value][$key];
+								$imageIsRemove = intval($_POST['cms-image-remove'][$value][$key]) == 1;
+								$image = new bmImage($this->application, ['identifier' => $imageId]);
+								if ($imageIsRemove)
+								{
+									$image->delete($object->objectName, $object->identifier, $value);
+								}
+								else
+								{
+									$image->caption = $imageCaption;
+								}
+							}
+						}
+
 						break;
 					case 'relation':
 						$relationsFromForm = @$_POST['cms-form-item-relation'][$field];
@@ -342,7 +370,7 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 
 			}
-			if (!isset($fields[$field]['type']))
+			if (!array_key_exists('type', $fields[$field]))
 			{
 				$fields[$field]['type'] = $this->getFieldTextType($object->map[$field]['dataType']);
 			}
