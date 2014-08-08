@@ -14,7 +14,7 @@ $(function () {
 
 				FileAPI.filterFiles(files, function (file, info/**Object*/) {
 					if (/^image/.test(file.type)) {
-						return  info.width >= 320 && info.height >= 240;
+						return  true;
 					}
 					return  false;
 				}, function (files/**Array*/, rejected/**Array*/) {
