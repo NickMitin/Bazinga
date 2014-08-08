@@ -57,7 +57,7 @@ $(function () {
 									else {
 										var $block = $('<div class="list-image-item-block">');
 										$block.append('<i class="list-image-item-remove fa fa-minus-square-o"></i>');
-										$block.append('<a href="'+data.url.replace('/200x200/', 'originals')+'" target="_blank"><img src="'+data.url+'" /></a>');
+										$block.append('<a href="'+data.url.replace('200x200', 'originals')+'" target="_blank"><img src="'+data.url+'" /></a>');
 										$block.append('<input type="hidden" value="'+group+'" name="cms-form-item['+group+']" />');
 										$block.append('<input type="hidden" value="'+data.id+'" name="cms-image-id['+group+']['+data.id+']" />');
 										$block.append('<input type="hidden" class="list-image-item-remove-input" value="0" name="cms-image-remove['+group+']['+data.id+']" />');
