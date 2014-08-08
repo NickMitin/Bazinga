@@ -12,9 +12,9 @@
 			<div class="list-image-item-remove-text"><a href="#">Востановить</a></div>
 		</div>
 	{% endfor %}
-	<hr />
 </div>
 
-<div class="form-field-image">
-	<input type="file" data-img="{{ fieldParams.type }}" data-group="{{ field }}" {% if fieldParams.type == 'images' %}multiple="on" {% endif %}accept="image/gif, image/jpeg, image/png" class="text files-image" name="cms-form-images[{{ field }}][]" />
-</div>
+<label for="img-{{ field }}-for" class="form-field-image">
+	Выберите файл{% if fieldParams.type == 'images' %}ы{% endif %} или передащите сюда
+	<input type="file" id="img-{{ field }}-for" data-img="{{ fieldParams.type }}" data-group="{{ field }}" {% if fieldParams.type == 'images' %}multiple="on" {% endif %}accept=".jpg,.jpeg,.gif,.png" class="text files-image" name="cms-form-images[{{ field }}][]" />
+</label>

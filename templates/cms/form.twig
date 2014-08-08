@@ -4,6 +4,9 @@
 		<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
 		<script src="/scripts/cms/file.js"></script>
 	{% endblock %}
+	{% block cssFile %}
+		<link rel="stylesheet" href="/styles/cms/file.css"/>
+	{% endblock %}
 	{% block moduleContent %}
 		<div class="cms-module-form">
 			<form action="./" enctype="multipart/form-data" method="post">
@@ -66,7 +69,7 @@
 								{% elseif fieldParams.type == 'images' or fieldParams.type == 'image' %}
 									{% include 'fields/images.twig' %}
 								{% elseif fieldParams.type == 'files' %}
-									123
+									{% include 'fields/files.twig' %}
 								{% else %}
 									<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
 								{% endif %}

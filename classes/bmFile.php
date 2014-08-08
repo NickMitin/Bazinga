@@ -1,6 +1,6 @@
-<?php
-
-/*
+<?php 
+  
+  /*
   * Copyright (c) 2014, "The Blind Mice Studio"
   * All rights reserved.
   * 
@@ -28,15 +28,13 @@
   * 
   */
 
-final class bmImage extends bmDataObject
-{
-	use bmImageResizeModule;
+  final class bmFile extends bmDataObject
+  {
+    public function __construct($application, $parameters = array())
+    {
+      /*FF::AC::MAPPING::{*/
 
-	public function __construct($application, $parameters = array())
-	{
-		/*FF::AC::MAPPING::{*/
-
-      $this->objectName = 'image';
+      $this->objectName = 'file';
       $this->map = array_merge($this->map, array(
 				'name' => array(
 					'fieldName' => 'name',
@@ -53,16 +51,6 @@ final class bmImage extends bmDataObject
 					'dataType' => BM_VT_INTEGER,
 					'defaultValue' => 0
 				),
-				'width' => array(
-					'fieldName' => 'width',
-					'dataType' => BM_VT_INTEGER,
-					'defaultValue' => 0
-				),
-				'height' => array(
-					'fieldName' => 'height',
-					'dataType' => BM_VT_INTEGER,
-					'defaultValue' => 0
-				),
 				'caption' => array(
 					'fieldName' => 'caption',
 					'dataType' => BM_VT_STRING,
@@ -72,31 +60,31 @@ final class bmImage extends bmDataObject
 
       /*FF::AC::MAPPING::}*/
 
-		parent::__construct($application, $parameters);
-	}
+      parent::__construct($application, $parameters);
+    }
 
-	public function __get($propertyName)
-	{
-		$this->checkDirty();
-
-		switch ($propertyName)
-		{
-			/*FF::AC::TOP::GETTER::{*/
+    public function __get($propertyName)
+    {
+      $this->checkDirty();
+      
+      switch ($propertyName)
+      {
+        /*FF::AC::TOP::GETTER::{*/
         
  
         /*FF::AC::TOP::GETTER::}*/
-			default:
-				return parent::__get($propertyName);
-				break;
-		}
-	}
-
-	/*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
+        default:
+          return parent::__get($propertyName);
+        break;
+      }
+    }
+    
+    /*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
     
 
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
-
-	/*FF::AC::DELETE_FUNCTION::{*/        
+    
+    /*FF::AC::DELETE_FUNCTION::{*/        
         
     public function delete()
     {
@@ -107,7 +95,7 @@ final class bmImage extends bmDataObject
       $this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']); 
       
       $sql = "DELETE FROM 
-                `image` 
+                `file` 
               WHERE 
                 `id` = " . $this->properties['identifier'] . ";
               ";
@@ -116,44 +104,6 @@ final class bmImage extends bmDataObject
     }
     
     /*FF::AC::DELETE_FUNCTION::}*/
-
-
-	public function delete()
-	{
-		$this->deleted = BM_C_DELETE_OBJECT;
-	}
-
-	public function getImg($group, $size, $resize = false)
-	{
-		$url = $group . '/' . $size . '/' . mb_substr($this->fileName, 0, 2) . '/' . $this->fileName;
-		if ($resize)
-		{
-			return $this->resize($url);
-		}
-		return BM_C_IMAGE_FOLDER . $url;
-	}
-
-	public function addLinkObject($object, $objectId, $group)
-	{
-		$imageId = intval($this->properties['identifier']);
-		$objectId = intval($objectId);
-		$object = $this->application->dataLink->quoteSmart($object);
-		$group = $this->application->dataLink->quoteSmart($group);
-		$sql = "
-			INSERT IGNORE INTO
-				`link_image_object` (`imageId`, `objectId`, `object`, `group`)
-			VALUES ({$imageId}, {$objectId}, {$object}, {$group})
-		";
-		$this->application->dataLink->query($sql);
-	}
-
-	public function getImage($group, $size = 'originals')
-	{
-		$imageName = BM_C_IMAGE_FOLDER . $group . '/' . $size . '/' . mb_substr($this->fileName, 0, 2) . '/' . $this->fileName;
-
-		return $imageName;
-	}
-
-}
-
+  }
+  
 ?>

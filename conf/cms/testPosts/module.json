@@ -3,6 +3,7 @@
 	"titles": {
 		"name": "Название",
 		"avatar": "Аватарка",
+		"file": "Файлы",
 		"gallery": "Галерея",
 		"gallery2": "Галерея 2"
 	},
@@ -14,6 +15,9 @@
 			"name": true,
 			"avatar": {
 				"type": "image"
+			},
+			"file": {
+				"type": "files"
 			},
 			"gallery": {
 				"type": "images"
