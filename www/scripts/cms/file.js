@@ -66,7 +66,7 @@ $(function () {
 										$item.append('<div class="list-image-item-remove-text"><a href="#">Востановить</a></div>');
 									}
 									$item.fadeIn(200, function () {
-										if (multiple == 'image')
+										if (multiple == 'image' && !data['error'])
 										{
 											$self.parent().parent().find('.list-image-item:last').remove();
 										}
