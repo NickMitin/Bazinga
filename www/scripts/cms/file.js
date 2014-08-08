@@ -64,13 +64,12 @@ $(function () {
 										$block.append('<input type="text" placeholder="Описание" class="text" value="'+data.caption+'" name="cms-image-caption['+group+']['+data.id+']" />');
 										$item.html($block);
 										$item.append('<div class="list-image-item-remove-text"><a href="#">Востановить</a></div>');
-									}
-									$item.fadeIn(200, function () {
 										if (multiple == 'image' && !data['error'])
 										{
-											$self.parent().parent().find('.list-image-item:last').remove();
+											$self.parent().parent().find('.list-image').html($item).append('<hr />');
 										}
-									});
+									}
+									$item.fadeIn(200);
 								});
 							}
 						});

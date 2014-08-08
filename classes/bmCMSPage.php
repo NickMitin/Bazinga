@@ -251,6 +251,7 @@ abstract class bmCMSPage extends bmHTMLPage
 						$object->{$field} = !!intval($value);
 						break;
 					case 'images':
+					case 'image':
 						if (
 							array_key_exists('cms-image-id', $_POST)
 							&& array_key_exists($field, $_POST['cms-image-id'])
