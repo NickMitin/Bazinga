@@ -113,6 +113,15 @@ abstract class bmCMSPage extends bmHTMLPage
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case "GET":
+				$param = $this->param2;
+				if ($param && is_string($param))
+				{
+					$param = explode('-', $param);
+					if (count($param) === 3 && $param[1] === 'archives')
+					{
+						return $this->archivesFiles($param[0], $param[2]);
+					}
+				}
 				if ($this->itemId)
 				{
 					return $this->displayForm();
@@ -254,6 +263,29 @@ abstract class bmCMSPage extends bmHTMLPage
 		$this->templateVars['errors'] = $this->getFlash("errors");
 
 		return $this->renderTemplate('form.twig', $this->templateVars);
+	}
+
+	protected function archivesFiles($group, $type)
+	{
+
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+		if ($object)
+		{
+			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
+			$this->templateVars['objectData'] = $object;
+			$this->templateVars['group'] = $group;
+			$this->templateVars['type'] = $type;
+
+			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
+		}
+		else
+		{
+			return false;
+		}
+
+		$this->templateVars['errors'] = $this->getFlash("errors");
+
+		return $this->renderTemplate('archivesFiles.twig', $this->templateVars);
 	}
 
 	/**

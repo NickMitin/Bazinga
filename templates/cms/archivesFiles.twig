@@ -1,0 +1,48 @@
+{% extends "_base.twig" %}
+	{% block jsFile %}
+	{% endblock %}
+	{% block cssFile %}
+		<link rel="stylesheet" href="/styles/cms/file.css"/>
+	{% endblock %}
+	{% block moduleContent %}
+		<div class="cms-module-form">
+			<table>
+				<tr>
+					<td class="caption">
+						<div class="caption">{{ fields[group].title }}</div>
+					</td>
+					<td class="field">
+						<div class="list-image">
+							{% if type == 'image' or type == 'images' %}
+								{% for image in objectData.getObjectImages(group, 1) %}
+									<div class="list-image-item">
+										<div class="list-image-item-block">
+											<i class="list-image-item-remove fa fa-plus-square-o"></i>
+											<a href="{{ image.image.getImage(image.group) }}" target="_blank"><img src="{{ image.image.getImage(image.group, '200x200') }}"/></a>
+											<input type="hidden" data-type="{{ type }}" data-group="{{ image.group }}" data-id="{{ image.image.getProperty('identifier') }}" class="list-image-item-remove-input" value="1" />
+										</div>
+									</div>
+								{% endfor %}
+							{% elseif type == "files" %}
+								{% for file in objectData.getObjectFiles(group, 1) %}
+									<div class="list-file-item">
+										<div class="list-file-item-block">
+											<a href="{{ file.file.getFile(file.group) }}" target="_blank" style="display: inline;width: auto;">
+												{{ file.file.getProperty('caption') }}
+												<i class="fa {% if file.file.getExtension() in icons|keys %}{{ icons[file.file.getExtension()] }}{% else %}{{ icons.default }}{% endif %}"></i>
+											</a>
+											<i class="list-file-item-remove fa fa-plus-square-o"></i>
+											<input type="hidden" data-type="{{ type }}" data-group="{{ file.group }}" data-id="{{ file.file.getProperty('identifier') }}" class="list-file-item-remove-input" value="1" />
+										</div>
+									</div>
+								{% endfor %}
+							{% endif %}
+
+							<br clear="left" />
+							<a href="../" class="files-archives"><<< Назад</a>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+	{% endblock %}

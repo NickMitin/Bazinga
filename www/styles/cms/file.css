@@ -65,3 +65,8 @@
 	background-color: #42cc42;
 	opacity: 0.5;
 }
+
+.cms-page .files-archives{
+	display: inline-block;
+	padding: 20px 0 10px 0;
+}

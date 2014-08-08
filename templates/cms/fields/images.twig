@@ -18,3 +18,4 @@
 	Выберите файл{% if fieldParams.type == 'images' %}ы{% endif %} или передащите сюда
 	<input type="file" id="img-{{ field }}-for" data-img="{{ fieldParams.type }}" data-group="{{ field }}" {% if fieldParams.type == 'images' %}multiple="on" {% endif %}accept=".jpg,.jpeg,.gif,.png" class="text files-image" name="cms-form-images[{{ field }}][]" />
 </label>
+<a href="./{{ field }}-archives-{{ fieldParams.type }}/" class="files-archives">Архив файлов</a>
