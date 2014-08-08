@@ -96,28 +96,6 @@ final class bmImage extends bmDataObject
 
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
 
-	/*FF::AC::DELETE_FUNCTION::{*/        
-        
-    public function delete()
-    {
-      
-      
-      
-      
-      $this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']); 
-      
-      $sql = "DELETE FROM 
-                `image` 
-              WHERE 
-                `id` = " . $this->properties['identifier'] . ";
-              ";
-      
-      $this->application->dataLink->query($sql);
-    }
-    
-    /*FF::AC::DELETE_FUNCTION::}*/
-
-
 	public function delete()
 	{
 		$this->deleted = BM_C_DELETE_OBJECT;

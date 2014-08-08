@@ -1,15 +1,17 @@
-{% set icons = {"default": "", "doc": "fa-file", "docx": "fa-file-word-o", "csv": "fa-file-excel-o", "xls": "fa-file-excel-o", "xlsx": "fa-file-excel-o", "jpg": "fa-file-image-o", "jpeg": "fa-file-image-o", "gif": "fa-file-image-o", "png": "fa-file-image-o", "svg": "fa-file-image-o", "avi": "fa-file-video-o", "mpg4": "fa-file-video-o", "mpg": "fa-file-video-o", "pdf": "fa-file-pdf-o", "php": "fa-file-code-o", "c": "fa-file-code-o", "js": "fa-file-code-o", "css": "fa-file-code-o", "mp3": "fa-file-audio-o", "wav": "fa-file-audio-o", "zip": "fa-file-archive-o", "rar": "fa-file-archive-o", "gz": "fa-file-archive-o", "tar": "fa-file-archive-o"} %}
+{% set icons = {"default": "fa-file", "doc": "fa-file-word-o", "docx": "fa-file-word-o", "csv": "fa-file-excel-o", "xls": "fa-file-excel-o", "xlsx": "fa-file-excel-o", "jpg": "fa-file-image-o", "jpeg": "fa-file-image-o", "gif": "fa-file-image-o", "png": "fa-file-image-o", "svg": "fa-file-image-o", "avi": "fa-file-video-o", "mpg4": "fa-file-video-o", "mpg": "fa-file-video-o", "pdf": "fa-file-pdf-o", "php": "fa-file-code-o", "c": "fa-file-code-o", "js": "fa-file-code-o", "css": "fa-file-code-o", "mp3": "fa-file-audio-o", "wav": "fa-file-audio-o", "zip": "fa-file-archive-o", "rar": "fa-file-archive-o", "gz": "fa-file-archive-o", "tar": "fa-file-archive-o"} %}
 
 <div class="list-file">
 	{% for file in objectData.getObjectFiles(field) %}
 		<div class="list-file-item">
 			<div class="list-file-item-block">
-				<i class="list-file-item-remove fa fa-minus-square-o"></i>
-				<a href="{{ file.file.getFile(file.group) }}" target="_blank"></a>
+				<a href="{{ file.file.getFile(file.group) }}" target="_blank">
+					<i class="fa {% if file.file.getExtension() in icons|keys %}{{ icons[file.file.getExtension()] }}{% else %}{{ icons.default }}{% endif %}"></i>
+				</a>
 				<input type="hidden" value="{{ file.group }}" name="cms-form-item[{{ file.group }}]" />
 				<input type="hidden" value="{{ file.file.getProperty('identifier') }}" name="cms-file-id[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
 				<input type="hidden" class="list-file-item-remove-input" value="0" name="cms-file-remove[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
-				<input type="text" placeholder="Описание" class="text" value="{{ file.file.getProperty('caption') }}" name="cms-image-caption[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
+				<input type="text" placeholder="Описание" class="text" value="{{ file.file.getProperty('caption') }}" name="cms-file-caption[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
+				<i class="list-file-item-remove fa fa-minus-square-o"></i>
 			</div>
 			<div class="list-file-item-remove-text"><a href="#">Востановить</a></div>
 		</div>

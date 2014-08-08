@@ -123,10 +123,15 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				break;
 			case "POST":
-				if (array_key_exists('_images', $_POST))
+				if (array_key_exists('images_file', $_POST))
 				{
 
 					return $this->addImage($_FILES);
+				}
+				elseif (array_key_exists('files_file', $_POST))
+				{
+
+					return $this->addFiles($_FILES);
 				}
 				elseif ($this->itemId)
 				{
@@ -158,6 +163,29 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				$return = [
 					'url' => $errors->getImg($_POST['group'], '200x200', true),
+					'caption' => $errors->caption,
+					'id' => $errors->identifier,
+				];
+				return json_encode($return);
+			}
+		}
+	}
+
+	protected function addFiles($files)
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		if (array_key_exists('images', $files))
+		{
+			$errors = $object->addObjectFile($_POST['group'], $files['images']);
+			if ($errors && is_string($errors))
+			{
+				return json_encode(['error' => $errors]);
+			}
+			elseif ($errors)
+			{
+				$return = [
+					'url' => $errors->getFile($_POST['group']),
 					'caption' => $errors->caption,
 					'id' => $errors->identifier,
 				];
@@ -263,6 +291,30 @@ abstract class bmCMSPage extends bmHTMLPage
 								$imageCaption = $_POST['cms-image-caption'][$value][$key];
 								$imageIsRemove = intval($_POST['cms-image-remove'][$value][$key]) == 1;
 								$image = new bmImage($this->application, ['identifier' => $imageId]);
+								if ($imageIsRemove)
+								{
+									$image->delete();
+								}
+								else
+								{
+									$image->caption = $imageCaption;
+								}
+							}
+						}
+
+						break;
+					case 'files':
+						if (
+							array_key_exists('cms-file-id', $_POST)
+							&& array_key_exists($field, $_POST['cms-file-id'])
+						)
+						{
+							foreach ($_POST['cms-file-id'][$value] as $key => $imageId)
+							{
+								$imageId = intval($imageId);
+								$imageCaption = $_POST['cms-file-caption'][$value][$key];
+								$imageIsRemove = intval($_POST['cms-file-remove'][$value][$key]) == 1;
+								$image = new bmFile($this->application, ['identifier' => $imageId]);
 								if ($imageIsRemove)
 								{
 									$image->delete();

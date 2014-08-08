@@ -1,6 +1,6 @@
-<?php 
-  
-  /*
+<?php
+
+/*
   * Copyright (c) 2014, "The Blind Mice Studio"
   * All rights reserved.
   * 
@@ -28,14 +28,15 @@
   * 
   */
 
-  final class bmFile extends bmDataObject
-  {
-    public function __construct($application, $parameters = array())
-    {
-      /*FF::AC::MAPPING::{*/
+final class bmFile extends bmDataObject
+{
+	public function __construct($application, $parameters = array())
+	{
+		/*FF::AC::MAPPING::{*/
 
-      $this->objectName = 'file';
-      $this->map = array_merge($this->map, array(
+		$this->objectName = 'file';
+		$this->map = array_merge(
+			$this->map, array(
 				'name' => array(
 					'fieldName' => 'name',
 					'dataType' => BM_VT_STRING,
@@ -56,54 +57,64 @@
 					'dataType' => BM_VT_STRING,
 					'defaultValue' => ''
 				)
-      ));
+			)
+		);
 
-      /*FF::AC::MAPPING::}*/
+		/*FF::AC::MAPPING::}*/
 
-      parent::__construct($application, $parameters);
-    }
+		parent::__construct($application, $parameters);
+	}
 
-    public function __get($propertyName)
-    {
-      $this->checkDirty();
-      
-      switch ($propertyName)
-      {
-        /*FF::AC::TOP::GETTER::{*/
-        
- 
-        /*FF::AC::TOP::GETTER::}*/
-        default:
-          return parent::__get($propertyName);
-        break;
-      }
-    }
-    
-    /*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
-    
+	public function __get($propertyName)
+	{
+		$this->checkDirty();
 
-    /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
-    
-    /*FF::AC::DELETE_FUNCTION::{*/        
-        
-    public function delete()
-    {
-      
-      
-      
-      
-      $this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']); 
-      
-      $sql = "DELETE FROM 
-                `file` 
-              WHERE 
-                `id` = " . $this->properties['identifier'] . ";
-              ";
-      
-      $this->application->dataLink->query($sql);
-    }
-    
-    /*FF::AC::DELETE_FUNCTION::}*/
-  }
-  
+		switch ($propertyName)
+		{
+			/*FF::AC::TOP::GETTER::{*/
+
+
+			/*FF::AC::TOP::GETTER::}*/
+			default:
+				return parent::__get($propertyName);
+				break;
+		}
+	}
+
+	/*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
+
+
+	/*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
+
+	public function delete()
+	{
+		$this->deleted = BM_C_DELETE_OBJECT;
+	}
+
+	public function getFile($group)
+	{
+		return BM_C_FILE_FOLDER . $group . '/' . mb_substr($this->fileName, 0, 2) . '/' . $this->fileName;
+	}
+
+	public function getExtension()
+	{
+		return pathinfo($this->fileName)['extension'];
+	}
+
+	public function addLinkObject($object, $objectId, $group)
+	{
+		$fileId = intval($this->properties['identifier']);
+		$objectId = intval($objectId);
+		$object = $this->application->dataLink->quoteSmart($object);
+		$group = $this->application->dataLink->quoteSmart($group);
+		$sql = "
+			INSERT IGNORE INTO
+				`link_file_object` (`fileId`, `objectId`, `object`, `group`)
+			VALUES ({$fileId}, {$objectId}, {$object}, {$group})
+		";
+		$this->application->dataLink->query($sql);
+	}
+
+}
+
 ?>
