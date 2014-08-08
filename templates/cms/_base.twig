@@ -8,9 +8,12 @@
 	<link rel="stylesheet" href="/styles/cms/reset.css"/>
 	<link rel="stylesheet" href="/styles/cms/common.css"/>
 	<link rel="stylesheet" href="/styles/cms/base.css"/>
+	{% block cssFile %}{% endblock %}
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="/scripts/cms/cms.js"></script>
+	{% block jsFile %}{% endblock %}
+
 </head>
 <body class="cms-page">
 <header>

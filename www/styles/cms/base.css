@@ -118,9 +118,12 @@ strong {
 	vertical-align: top;
 }
 
-.cms-page .module-content .cms-module-form TD.caption {
+.cms-page .module-content .cms-module-form TD.caption  {
 	padding-right: 7px;
 	min-width: 120px
+}
+.cms-page .module-content .cms-module-form TD.field.red p ,.cms-page .module-content .cms-module-form TD.caption.red .caption {
+	color: #ff4242;
 }
 
 .cms-page .module-content .cms-module-form TD.caption, .cms-page .module-content .cms-module-form TD.field {
@@ -188,8 +191,30 @@ strong {
 .cms-page .list-image .list-image-item {
 	padding: 0 20px 20px 0;
 	display: inline-block;
-	width: auto;
 	position: relative;
+	width: 220px;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-canvast
+{
+	width: 200px;
+	height: 200px;
+	position: relative;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-progres {
+	z-index: 100;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 200px;
+	background-color: #42cc42;
+	opacity: 0.5;
+}
+
+.cms-page .list-image .list-image-item input {
+	width: 200px !important;
 }
 
 .cms-page .list-image .list-image-item:hover .list-image-item-remove {
@@ -215,4 +240,6 @@ strong {
 	display: block;
 	margin-bottom: 5px;
 }
+
+
 

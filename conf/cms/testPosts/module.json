@@ -13,7 +13,7 @@
 		"fields": {
 			"name": true,
 			"avatar": {
-				"type": "images"
+				"type": "image"
 			},
 			"gallery": {
 				"type": "images"

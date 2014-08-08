@@ -16,6 +16,9 @@ abstract class bmCMSPage extends bmHTMLPage
 	protected $param2;
 	protected $itemId;
 
+
+	use bmFlashSession;
+
 	/**
 	 * @param $application
 	 * @param array $parameters
@@ -120,7 +123,12 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				break;
 			case "POST":
-				if ($this->itemId)
+				if (array_key_exists('_images', $_POST))
+				{
+
+					return $this->addImage($_FILES);
+				}
+				elseif ($this->itemId)
 				{
 					return $this->saveForm();
 				}
@@ -128,6 +136,33 @@ abstract class bmCMSPage extends bmHTMLPage
 			case "PUT":
 				return $this->createObject();
 				break;
+		}
+	}
+
+	protected function addImage($files)
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		if (array_key_exists('images', $files))
+		{
+			$errors = $object->addObjectImage($_POST['group'], $files['images']);
+			if ($errors && is_string($errors))
+			{
+				return json_encode(['error' => $errors]);
+			}
+			elseif ($errors)
+			{
+				if ($_POST['multiple'] == 'image')
+				{
+					$object->deleteObjectImages($_POST['group'], $errors->identifier);
+				}
+				$return = [
+					'url' => $errors->getImg($_POST['group'], '200x200', true),
+					'caption' => $errors->caption,
+					'id' => $errors->identifier,
+				];
+				return json_encode($return);
+			}
 		}
 	}
 
@@ -188,6 +223,8 @@ abstract class bmCMSPage extends bmHTMLPage
 			return false;
 		}
 
+		$this->templateVars['errors'] = $this->getFlash("errors");
+
 		return $this->renderTemplate('form.twig', $this->templateVars);
 	}
 
@@ -214,10 +251,6 @@ abstract class bmCMSPage extends bmHTMLPage
 						$object->{$field} = !!intval($value);
 						break;
 					case 'images':
-						if (array_key_exists('cms-form-images', $_FILES))
-						{
-							$errors = $object->addObjectImages($field, $_FILES['cms-form-images']);
-						}
 						if (
 							array_key_exists('cms-image-id', $_POST)
 							&& array_key_exists($field, $_POST['cms-image-id'])
@@ -231,7 +264,7 @@ abstract class bmCMSPage extends bmHTMLPage
 								$image = new bmImage($this->application, ['identifier' => $imageId]);
 								if ($imageIsRemove)
 								{
-									$image->delete($object->objectName, $object->identifier, $value);
+									$image->delete();
 								}
 								else
 								{

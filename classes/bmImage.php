@@ -30,6 +30,8 @@
 
 final class bmImage extends bmDataObject
 {
+	use bmImageResizeModule;
+
 	public function __construct($application, $parameters = array())
 	{
 		/*FF::AC::MAPPING::{*/
@@ -102,29 +104,19 @@ final class bmImage extends bmDataObject
 	/*FF::AC::DELETE_FUNCTION::}*/
 
 
-	public function delete($objectName, $objectId, $objectGroup)
+	public function delete()
 	{
-		$objectGroup = $this->application->dataLink->quoteSmart($objectGroup);
-		$objectName = $this->application->dataLink->quoteSmart($objectName);
+		$this->deleted = BM_C_DELETE_OBJECT;
+	}
 
-		$this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']);
-
-		$sql = "DELETE FROM
-                `image`
-              WHERE
-                `id` = " . $this->properties['identifier'] . ";
-              ";
-		$this->application->dataLink->query($sql);
-
-		$sql = "DELETE FROM
-                `link_image_object`
-              WHERE
-                `objectId` = " . $objectId . " and
-                `object` = " . $objectName . " and
-                `group` = " . $objectGroup . " and
-                `imageId` = " . $this->properties['identifier'] . ";
-              ";
-		$this->application->dataLink->query($sql);
+	public function getImg($group, $size, $resize = false)
+	{
+		$url = $group . '/' . $size . '/' . mb_substr($this->fileName, 0, 2) . '/' . $this->fileName;
+		if ($resize)
+		{
+			return $this->resize($url);
+		}
+		return BM_C_IMAGE_FOLDER . $url;
 	}
 
 	public function addLinkObject($object, $objectId, $group)

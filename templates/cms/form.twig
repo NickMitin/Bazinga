@@ -1,9 +1,25 @@
 {% extends "_base.twig" %}
-
+	{% block jsFile %}
+		<script>window.FileAPI = { staticPath: '/scripts/cms/fileApi/' };</script>
+		<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
+		<script src="/scripts/cms/file.js"></script>
+	{% endblock %}
 	{% block moduleContent %}
 		<div class="cms-module-form">
 			<form action="./" enctype="multipart/form-data" method="post">
 				<table>
+					{% if errors %}
+						<tr>
+							<td class="caption red">
+								<div class="caption">Ошибки</div>
+							</td>
+							<td class="field red">
+								{% for key, val in errors %}
+									<p>{{ key }} -> {{ val }}</p>
+								{% endfor %}
+							</td>
+						</tr>
+					{% endif %}
 					{% for field, fieldParams in fields %}
 						<tr>
 							<td class="caption">
@@ -47,7 +63,7 @@
 											{% endfor %}
 										</ul>
 									{% endif %}
-								{% elseif fieldParams.type == 'images' %}
+								{% elseif fieldParams.type == 'images' or fieldParams.type == 'image' %}
 									{% include 'fields/images.twig' %}
 								{% elseif fieldParams.type == 'files' %}
 									123
