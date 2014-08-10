@@ -29,8 +29,8 @@
 									<div class="list-file-item">
 										<div class="list-file-item-block">
 											<a href="{{ file.file.getFile(file.group) }}" target="_blank" style="display: inline;width: auto;">
-												{{ file.file.getProperty('caption') }}
 												{% include 'fields/icons_file.twig' %}
+												{{ file.file.getProperty('caption') }}
 											</a>
 											<i class="list-file-item-remove fa fa-plus-square-o"></i>
 											<input type="hidden" data-type="{{ type }}" data-group="{{ file.group }}" data-id="{{ file.file.getProperty('identifier') }}" class="list-file-item-remove-input" value="1" />
