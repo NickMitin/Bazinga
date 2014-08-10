@@ -30,7 +30,7 @@
 										<div class="list-file-item-block">
 											<a href="{{ file.file.getFile(file.group) }}" target="_blank" style="display: inline;width: auto;">
 												{{ file.file.getProperty('caption') }}
-												<i class="fa {% if file.file.getExtension() in icons|keys %}{{ icons[file.file.getExtension()] }}{% else %}{{ icons.default }}{% endif %}"></i>
+												{% include 'fields/icons_file.twig' %}
 											</a>
 											<i class="list-file-item-remove fa fa-plus-square-o"></i>
 											<input type="hidden" data-type="{{ type }}" data-group="{{ file.group }}" data-id="{{ file.file.getProperty('identifier') }}" class="list-file-item-remove-input" value="1" />

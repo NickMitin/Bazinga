@@ -19,7 +19,7 @@
 <header>
 	<ul class="top-menu clearfix">
 		{% for sectionName, sectionInfo in cmsStructure %}
-			<li {% if currentPathSections[1] == sectionName %}class="active"{% endif %} >
+			<li{% if currentPathSections[1] == sectionName %} class="active"{% endif %}>
 				<a href="/cms/{{ sectionName }}/">
 					{% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
 					{{ sectionInfo.title }}

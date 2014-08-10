@@ -1,11 +1,9 @@
-{% set icons = {"default": "fa-file", "doc": "fa-file-word-o", "docx": "fa-file-word-o", "csv": "fa-file-excel-o", "xls": "fa-file-excel-o", "xlsx": "fa-file-excel-o", "jpg": "fa-file-image-o", "jpeg": "fa-file-image-o", "gif": "fa-file-image-o", "png": "fa-file-image-o", "svg": "fa-file-image-o", "avi": "fa-file-video-o", "mpg4": "fa-file-video-o", "mpg": "fa-file-video-o", "pdf": "fa-file-pdf-o", "php": "fa-file-code-o", "c": "fa-file-code-o", "js": "fa-file-code-o", "css": "fa-file-code-o", "mp3": "fa-file-audio-o", "wav": "fa-file-audio-o", "zip": "fa-file-archive-o", "rar": "fa-file-archive-o", "gz": "fa-file-archive-o", "tar": "fa-file-archive-o"} %}
-
 <div class="list-file">
 	{% for file in objectData.getObjectFiles(field) %}
 		<div class="list-file-item">
 			<div class="list-file-item-block">
 				<a href="{{ file.file.getFile(file.group) }}" target="_blank">
-					<i class="fa {% if file.file.getExtension() in icons|keys %}{{ icons[file.file.getExtension()] }}{% else %}{{ icons.default }}{% endif %}"></i>
+					{% include 'fields/icons_file.twig' %}
 				</a>
 				<input type="hidden" value="{{ file.group }}" name="cms-form-item[{{ file.group }}]" />
 				<input type="hidden" value="{{ file.file.getProperty('identifier') }}" name="cms-file-id[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
