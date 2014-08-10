@@ -142,6 +142,10 @@ abstract class bmCMSPage extends bmHTMLPage
 
 					return $this->addFiles($_FILES);
 				}
+				elseif (array_key_exists('event', $_POST) && $_POST['event'] === 'archivesFile')
+				{
+					return $this->archivesFileRestore();
+				}
 				elseif ($this->itemId)
 				{
 					return $this->saveForm();
@@ -151,6 +155,31 @@ abstract class bmCMSPage extends bmHTMLPage
 				return $this->createObject();
 				break;
 		}
+	}
+
+	protected function archivesFileRestore()
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		$type = $_POST['type'];
+		$group = $_POST['group'];
+		$fileId = $_POST['fileId'];
+
+		switch ($type)
+		{
+			case 'image':
+				$object->deleteObjectImages($group, intval($fileId)); // Удоляем прежню картинку
+			case 'images':
+				$image = new bmImage($this->application, ['identifier' => intval($fileId)]);
+				$image->deleted = BM_C_DELETE_OBJECT -1;
+				break;
+			case 'files':
+				$file = new bmFile($this->application, ['identifier' => intval($fileId)]);
+				$file->deleted = BM_C_DELETE_OBJECT -1;
+				break;
+		}
+
+		return ['respons' => true];
 	}
 
 	protected function addImage($files)
