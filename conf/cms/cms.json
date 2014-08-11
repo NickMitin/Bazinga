@@ -3,10 +3,6 @@
 		"users": {
 			"title": "Пользователи",
 			"icon": "child"
-		},
-		"testPosts": {
-			"title": "Посты",
-			"icon": "file"
 		}
 	}
 }
