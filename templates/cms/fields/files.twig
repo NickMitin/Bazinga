@@ -1,0 +1,24 @@
+<div class="list-file">
+	{% for file in objectData.getObjectFiles(field) %}
+		<div class="list-file-item">
+			<div class="list-file-item-block">
+				<a href="{{ file.file.getFile(file.group) }}" target="_blank">
+					{% include 'fields/icons_file.twig' %}
+				</a>
+				<input type="hidden" value="{{ file.group }}" name="cms-form-item[{{ file.group }}]" />
+				<input type="hidden" value="{{ file.file.getProperty('identifier') }}" name="cms-file-id[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
+				<input type="hidden" class="list-file-item-remove-input" value="0" name="cms-file-remove[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
+				<input type="text" placeholder="Описание" class="text" value="{{ file.file.getProperty('caption') }}" name="cms-file-caption[{{ field }}][{{ file.file.getProperty('identifier') }}]" />
+				<i class="list-file-item-remove fa fa-minus-square-o"></i>
+			</div>
+			<div class="list-file-item-remove-text"><a href="#">Востановить</a></div>
+		</div>
+	{% endfor %}
+</div>
+
+<label for="file-{{ field }}-for" class="form-field-file">
+	Выберите файлы или передащите сюда
+	<input type="file" id="file-{{ field }}-for" data-img="{{ fieldParams.type }}" data-group="{{ field }}" multiple="on" class="text files-file" name="cms-form-files[{{ field }}][]" />
+</label>
+<a href="./{{ field }}-archives-files/" class="files-archives">Архив файлов</a>
+

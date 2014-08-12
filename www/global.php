@@ -71,7 +71,8 @@ if (!isset($_SERVER['HTTP_USER_AGENT']))
 	$_SERVER['HTTP_USER_AGENT'] = 'N/A';
 }
 
-header('cache-control: no-cache', true);
+header('Cache-Control: no-cache, must-revalidate');
+header('Pragma: no-cache');
 header('content-type: text/html; charset=utf-8', true);
 
 require($_SERVER['DOCUMENT_ROOT'] . '/../conf/application.conf');

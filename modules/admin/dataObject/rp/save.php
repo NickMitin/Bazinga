@@ -139,6 +139,7 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 	public function execute()
 	{
 		$dataLink = $this->application->dataLink;
+		$oldDataObjectField = [];
 
 		if ($this->dataObjectId != 0)
 		{
@@ -198,6 +199,7 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 					}
 
 					$dataField = new bmDataObjectField($this->application, array('identifier' => $item->identifier), $migration);
+					$oldDataObjectField[$dataField->fieldName] = clone $dataField;
 					$dataField->propertyName = $item->propertyName;
 					$dataField->fieldName = $item->fieldName;
 					$dataField->dataType = $item->dataType;
@@ -219,7 +221,7 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 						$dataObjectMap->removeField($item->identifier);
 						break;
 					case 'change':
-						$dataObjectMap->renameField($item->identifier, $item->oldFieldName);
+						$dataObjectMap->renameField($item->identifier, $item->oldFieldName, $oldDataObjectField);
 						break;
 				}
 

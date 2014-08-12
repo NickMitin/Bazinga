@@ -1,10 +1,29 @@
 {% extends "_base.twig" %}
-
+	{% block jsFile %}
+		<script>window.FileAPI = { staticPath: '/scripts/cms/fileApi/' };</script>
+		<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
+		<script src="/scripts/cms/file.js"></script>
+	{% endblock %}
+	{% block cssFile %}
+		<link rel="stylesheet" href="/styles/cms/file.css"/>
+	{% endblock %}
 	{% block moduleContent %}
 		<div class="cms-module-form">
-			<form action="./" method="post">
+			<form action="./" enctype="multipart/form-data" method="post">
 				<table>
-					{% for field,fieldParams in fields %}
+					{% if errors %}
+						<tr>
+							<td class="caption red">
+								<div class="caption">Ошибки</div>
+							</td>
+							<td class="field red">
+								{% for key, val in errors %}
+									<p>{{ key }} -> {{ val }}</p>
+								{% endfor %}
+							</td>
+						</tr>
+					{% endif %}
+					{% for field, fieldParams in fields %}
 						<tr>
 							<td class="caption">
 								<div class="caption">{{ fieldParams.title }}</div>
@@ -14,13 +33,13 @@
 									<input type="password" class="text password" name="cms-form-item[{{ field }}]"/>
 								{% elseif fieldParams.type == 'checkbox' %}
 									<label>
-										<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData[field] %}checked{% endif %} />
+										<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
 									</label>
 								{% elseif fieldParams.type == 'datetime' %}
 									{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
-									<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData[field] }}"/>
+									<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
 								{% elseif fieldParams.type == 'text' %}
-									<textarea name="cms-form-item[{{ field }}]">{{ objectData[field] }}</textarea>
+									<textarea name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
 								{% elseif fieldParams.type == 'custom' %}
 									{% autoescape false %}
 									{{ fieldParams.html }}
@@ -47,8 +66,12 @@
 											{% endfor %}
 										</ul>
 									{% endif %}
+								{% elseif fieldParams.type == 'images' or fieldParams.type == 'image' %}
+									{% include 'fields/images.twig' %}
+								{% elseif fieldParams.type == 'files' %}
+									{% include 'fields/files.twig' %}
 								{% else %}
-									<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData[field] }}"/>
+									<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
 								{% endif %}
 							</td>
 						</tr>

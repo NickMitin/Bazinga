@@ -10,7 +10,7 @@ $(document).ready(function () {
 		}).done(function (json) {
 			document.location.href = document.location.href + json.id + '/';
 		});
-	})
+	});
 
 
 	//todo: сделать подгрузку кастомных скриптов и стилей - и перенести это туда!!!!!
@@ -18,10 +18,14 @@ $(document).ready(function () {
 		$.ajax({
 			url: "./course/",
 			type: "PUT",
-			dataType: "html",
+			dataType: "html"
 		}).done(function ($tr) {
 			$('.courses-list TBODY').append($tr);
 		});
-	})
+	});
 
 });
+
+
+
+

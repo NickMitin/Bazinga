@@ -1,0 +1,21 @@
+<div class="list-image">
+	{% for image in objectData.getObjectImages(field) %}
+		<div class="list-image-item">
+			<div class="list-image-item-block">
+				<i class="list-image-item-remove fa fa-minus-square-o"></i>
+				<a href="{{ image.image.getImage(image.group) }}" target="_blank"><img src="{{ image.image.getImage(image.group, '200x200') }}" /></a>
+				<input type="hidden" value="{{ image.group }}" name="cms-form-item[{{ image.group }}]" />
+				<input type="hidden" value="{{ image.image.getProperty('identifier') }}" name="cms-image-id[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+				<input type="hidden" class="list-image-item-remove-input" value="0" name="cms-image-remove[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+				<input type="text" placeholder="Описание" class="text" value="{{ image.image.getProperty('caption') }}" name="cms-image-caption[{{ field }}][{{ image.image.getProperty('identifier') }}]" />
+			</div>
+			<div class="list-image-item-remove-text"><a href="#">Востановить</a></div>
+		</div>
+	{% endfor %}
+</div>
+
+<label for="img-{{ field }}-for" class="form-field-image">
+	Выберите файл{% if fieldParams.type == 'images' %}ы{% endif %} или передащите сюда
+	<input type="file" id="img-{{ field }}-for" data-img="{{ fieldParams.type }}" data-group="{{ field }}" {% if fieldParams.type == 'images' %}multiple="on" {% endif %}accept=".jpg,.jpeg,.gif,.png" class="text files-image" name="cms-form-images[{{ field }}][]" />
+</label>
+<a href="./{{ field }}-archives-{{ fieldParams.type }}/" class="files-archives">Архив файлов</a>
