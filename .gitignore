@@ -7,3 +7,5 @@ conf/db_default.conf
 logs/
 conf/passwd.conf
 conf/local.conf
+vendor
+composer.lock
