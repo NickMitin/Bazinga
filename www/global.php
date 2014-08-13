@@ -48,6 +48,10 @@ function pawAutoload($className)
 		{
 			require_once(projectRoot . '/lib/' . $className . '.php');
 		}
+		elseif (file_exists(projectRoot . '/migration/' . $className . '.php'))
+		{
+			require_once(projectRoot . '/migration/' . $className . '.php');
+		}
 	}
 }
 
@@ -67,13 +71,17 @@ if (!isset($_SERVER['HTTP_USER_AGENT']))
 	$_SERVER['HTTP_USER_AGENT'] = 'N/A';
 }
 
-header('cache-control: no-cache', true);
+header('Cache-Control: no-cache, must-revalidate');
+header('Pragma: no-cache');
 header('content-type: text/html; charset=utf-8', true);
 
 require($_SERVER['DOCUMENT_ROOT'] . '/../conf/application.conf');
 require($_SERVER['DOCUMENT_ROOT'] . '/../conf/local.conf');
 
 
-$application = new bmApplication(null);
+if (!defined('BM_CONSOLE'))
+{
+	$application = new bmApplication(null);
+}
 
-?>
+

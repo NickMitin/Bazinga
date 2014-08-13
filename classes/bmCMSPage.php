@@ -16,6 +16,9 @@ abstract class bmCMSPage extends bmHTMLPage
 	protected $param2;
 	protected $itemId;
 
+
+	use bmFlashSession;
+
 	/**
 	 * @param $application
 	 * @param array $parameters
@@ -109,6 +112,15 @@ abstract class bmCMSPage extends bmHTMLPage
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case "GET":
+				$param = $this->param2;
+				if ($param && is_string($param))
+				{
+					$param = explode('-', $param);
+					if (count($param) === 3 && $param[1] === 'archives')
+					{
+						return $this->archivesFiles($param[0], $param[2]);
+					}
+				}
 				if ($this->itemId)
 				{
 					return $this->displayForm();
@@ -119,7 +131,21 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				break;
 			case "POST":
-				if ($this->itemId)
+				if (array_key_exists('images_file', $_POST))
+				{
+
+					return $this->addImage($_FILES);
+				}
+				elseif (array_key_exists('files_file', $_POST))
+				{
+
+					return $this->addFiles($_FILES);
+				}
+				elseif (array_key_exists('event', $_POST) && $_POST['event'] === 'archivesFile')
+				{
+					return $this->archivesFileRestore();
+				}
+				elseif ($this->itemId)
 				{
 					return $this->saveForm();
 				}
@@ -127,6 +153,81 @@ abstract class bmCMSPage extends bmHTMLPage
 			case "PUT":
 				return $this->createObject();
 				break;
+		}
+	}
+
+	protected function archivesFileRestore()
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		$type = $_POST['type'];
+		$group = $_POST['group'];
+		$fileId = $_POST['fileId'];
+
+		switch ($type)
+		{
+			case 'image':
+				$object->deleteObjectImages($group, intval($fileId)); // Удоляем прежню картинку
+			case 'images':
+				$image = new bmImage($this->application, ['identifier' => intval($fileId)]);
+				$image->deleted = BM_C_DELETE_OBJECT -1;
+				break;
+			case 'files':
+				$file = new bmFile($this->application, ['identifier' => intval($fileId)]);
+				$file->deleted = BM_C_DELETE_OBJECT -1;
+				break;
+		}
+
+		return ['respons' => true];
+	}
+
+	protected function addImage($files)
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		if (array_key_exists('images', $files))
+		{
+			$errors = $object->addObjectImage($_POST['group'], $files['images']);
+			if ($errors && is_string($errors))
+			{
+				return json_encode(['error' => $errors]);
+			}
+			elseif ($errors)
+			{
+				if ($_POST['multiple'] == 'image')
+				{
+					$object->deleteObjectImages($_POST['group'], $errors->identifier);
+				}
+				$return = [
+					'url' => $errors->getImg($_POST['group'], '200x200', true),
+					'caption' => $errors->caption,
+					'id' => $errors->identifier,
+				];
+				return json_encode($return);
+			}
+		}
+	}
+
+	protected function addFiles($files)
+	{
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+
+		if (array_key_exists('images', $files))
+		{
+			$errors = $object->addObjectFile($_POST['group'], $files['images']);
+			if ($errors && is_string($errors))
+			{
+				return json_encode(['error' => $errors]);
+			}
+			elseif ($errors)
+			{
+				$return = [
+					'url' => $errors->getFile($_POST['group']),
+					'caption' => $errors->caption,
+					'id' => $errors->identifier,
+				];
+				return json_encode($return);
+			}
 		}
 	}
 
@@ -152,7 +253,7 @@ abstract class bmCMSPage extends bmHTMLPage
 		if ($object)
 		{
 			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
-			$this->templateVars['objectData'] = $object->toArray();
+			$this->templateVars['objectData'] = $object;
 
 			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
 			foreach ($this->templateVars['fields'] as $field => $fieldInfo)
@@ -187,7 +288,32 @@ abstract class bmCMSPage extends bmHTMLPage
 			return false;
 		}
 
+		$this->templateVars['errors'] = $this->getFlash("errors");
+
 		return $this->renderTemplate('form.twig', $this->templateVars);
+	}
+
+	protected function archivesFiles($group, $type)
+	{
+
+		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+		if ($object)
+		{
+			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
+			$this->templateVars['objectData'] = $object;
+			$this->templateVars['group'] = $group;
+			$this->templateVars['type'] = $type;
+
+			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
+		}
+		else
+		{
+			return false;
+		}
+
+		$this->templateVars['errors'] = $this->getFlash("errors");
+
+		return $this->renderTemplate('archivesFiles.twig', $this->templateVars);
 	}
 
 	/**
@@ -211,6 +337,55 @@ abstract class bmCMSPage extends bmHTMLPage
 						break;
 					case 'checkbox':
 						$object->{$field} = !!intval($value);
+						break;
+					case 'images':
+					case 'image':
+						if (
+							array_key_exists('cms-image-id', $_POST)
+							&& array_key_exists($field, $_POST['cms-image-id'])
+						)
+						{
+							foreach ($_POST['cms-image-id'][$value] as $key => $imageId)
+							{
+								$imageId = intval($imageId);
+								$imageCaption = $_POST['cms-image-caption'][$value][$key];
+								$imageIsRemove = intval($_POST['cms-image-remove'][$value][$key]) == 1;
+								$image = new bmImage($this->application, ['identifier' => $imageId]);
+								if ($imageIsRemove)
+								{
+									$image->delete();
+								}
+								else
+								{
+									$image->caption = $imageCaption;
+								}
+							}
+						}
+
+						break;
+					case 'files':
+						if (
+							array_key_exists('cms-file-id', $_POST)
+							&& array_key_exists($field, $_POST['cms-file-id'])
+						)
+						{
+							foreach ($_POST['cms-file-id'][$value] as $key => $imageId)
+							{
+								$imageId = intval($imageId);
+								$imageCaption = $_POST['cms-file-caption'][$value][$key];
+								$imageIsRemove = intval($_POST['cms-file-remove'][$value][$key]) == 1;
+								$image = new bmFile($this->application, ['identifier' => $imageId]);
+								if ($imageIsRemove)
+								{
+									$image->delete();
+								}
+								else
+								{
+									$image->caption = $imageCaption;
+								}
+							}
+						}
+
 						break;
 					case 'relation':
 						$relationsFromForm = @$_POST['cms-form-item-relation'][$field];
@@ -341,7 +516,7 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 
 			}
-			if (!isset($fields[$field]['type']))
+			if (!array_key_exists('type', $fields[$field]))
 			{
 				$fields[$field]['type'] = $this->getFieldTextType($object->map[$field]['dataType']);
 			}

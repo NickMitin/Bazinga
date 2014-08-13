@@ -118,9 +118,12 @@ strong {
 	vertical-align: top;
 }
 
-.cms-page .module-content .cms-module-form TD.caption {
+.cms-page .module-content .cms-module-form TD.caption  {
 	padding-right: 7px;
 	min-width: 120px
+}
+.cms-page .module-content .cms-module-form TD.field.red p ,.cms-page .module-content .cms-module-form TD.caption.red .caption {
+	color: #ff4242;
 }
 
 .cms-page .module-content .cms-module-form TD.caption, .cms-page .module-content .cms-module-form TD.field {
@@ -184,4 +187,59 @@ strong {
 	width: 200px;
 	height: 70px;
 }
+
+.cms-page .list-image .list-image-item {
+	padding: 0 20px 20px 0;
+	display: inline-block;
+	position: relative;
+	width: 220px;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-canvast
+{
+	width: 200px;
+	height: 200px;
+	position: relative;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-progres {
+	z-index: 100;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 200px;
+	background-color: #42cc42;
+	opacity: 0.5;
+}
+
+.cms-page .list-image .list-image-item input {
+	width: 200px !important;
+}
+
+.cms-page .list-image .list-image-item:hover .list-image-item-remove {
+	display: block;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-remove {
+	position: absolute;
+	top: 0;
+	right: 3px;
+	font-size: 1.5em;
+	z-index: 10;
+	opacity: 1;
+	color: #cc4242;
+	display: none;
+	cursor: pointer;
+}
+
+.cms-page .list-image .list-image-item .list-image-item-remove-text {
+	display: none;
+}
+.cms-page .list-image .list-image-item a {
+	display: block;
+	margin-bottom: 5px;
+}
+
+
 

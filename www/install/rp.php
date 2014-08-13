@@ -32,6 +32,8 @@
   mysql_select_db($database);
   mysql_query("INSERT INTO `user` SET `email` = '" . mysql_real_escape_string($adminEmail) . "', `password` = '" . md5($adminPassword) . "', `type` = 100;", $mysqlLink);
   
+  shell_exec("cd {$serverRoot} && php console -m migrate");
+  
   header('Location: /admin/');
   
 ?>

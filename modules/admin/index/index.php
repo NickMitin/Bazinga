@@ -4,7 +4,7 @@
   {
     public function __construct($application, $parameters = array())
     {
-     
+
       parent::__construct($application, $parameters);
       $this->addScript('ff/jquery');
       $this->addScript('admin/index/index');

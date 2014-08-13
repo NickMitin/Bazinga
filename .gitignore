@@ -3,8 +3,12 @@
 *.zip
 *.*~
 www/images/content/
+www/file/content/
 conf/db_default.conf
 logs/
+vendor/
+conf/cache_default.conf
+composer.lock
 conf/passwd.conf
 conf/local.conf
 vendor
