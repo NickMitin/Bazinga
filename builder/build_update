@@ -2,48 +2,54 @@
 
 <?php
 
-  
 
-  $useLib = false;
-  if (count($argv) > 1)
-  {
-    $useLib = ($argv[1] == 1 || $argv[1] == 'y'); 
-  }
 
-  $contents = file_get_contents('filelist.txt');
-  $contents = preg_split('/\s*\r?\n\s*/', $contents, -1, PREG_SPLIT_NO_EMPTY);
-  $result = array();
-  foreach ($contents as $file)
-  {
-    if (mb_strpos($file, 'conf/') === false && mb_strpos($file, 'classes/') === false || mb_strpos($file, 'classes/bmCMSPage.php') !== false)
-    {
-      if (mb_strpos($file, 'lib/') !== false)
-      {
-        if ($useLib)
-        {
-          $result[] = $file;  
-        }
-      }
-      else
-      {
-        $result[] = $file;  
-      }
-    }
-  }
-  file_put_contents('templist.txt', implode("\n", $result));
-  chdir("../");
-  if (!$useLib)
-  {
-    @unlink('www/paw_update.zip');
-    `cat builder/templist.txt | zip ./www/paw_update.zip -@`;
-    echo 'P@W update built.';
-  }
-  else
-  {
-    @unlink('www/paw_update_lib.zip');
-    `cat builder/templist.txt | zip ./www/paw_update_lib.zip -@`;
-    echo 'P@W update with lib built.';
-  }
-  unlink('builder/templist.txt');
+$useLib = false;
+if (count($argv) > 1)
+{
+	$useLib = ($argv[1] == 1 || $argv[1] == 'y');
+}
+
+$contents = file_get_contents('filelist.txt');
+$contents = preg_split('/\s*\r?\n\s*/', $contents, -1, PREG_SPLIT_NO_EMPTY);
+$result = array();
+foreach ($contents as $file)
+{
+	if (
+		mb_strpos($file, 'conf/') === false
+		&& mb_strpos($file, 'classes/') === false
+		|| mb_strpos($file, 'classes/bmCMSPage.php') !== false
+		|| mb_strpos($file, 'classes/bmImage.php') !== false
+		|| mb_strpos($file, 'classes/bmFile.php') !== false
+	)
+	{
+		if (mb_strpos($file, 'lib/') !== false)
+		{
+			if ($useLib)
+			{
+				$result[] = $file;
+			}
+		}
+		else
+		{
+			$result[] = $file;
+		}
+	}
+}
+file_put_contents('templist.txt', implode("\n", $result));
+chdir("../");
+if (!$useLib)
+{
+	@unlink('www/paw_update.zip');
+	`cat builder/templist.txt | zip ./www/paw_update.zip -@`;
+	echo 'P@W update built.';
+}
+else
+{
+	@unlink('www/paw_update_lib.zip');
+	`cat builder/templist.txt | zip ./www/paw_update_lib.zip -@`;
+	echo 'P@W update with lib built.';
+}
+unlink('builder/templist.txt');
 
 ?>
