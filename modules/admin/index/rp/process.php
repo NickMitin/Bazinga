@@ -1,7 +1,10 @@
 <?php
   class bmAdminProcedure extends bmCustomRemoteProcedure
   {
-   
+  	/*FF::AC::CGIPROPERTIES::{*/
+  	/*FF::AC::CGIPROPERTIES::}*/
+  	
+  	
     public function __construct($application, $parameters = array())
     {
       parent::__construct($application, $parameters); 

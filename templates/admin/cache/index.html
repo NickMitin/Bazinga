@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+  <head>
+    <script type="text/javascript" src="/scripts/ff/jquery.js"></script>
+    <script type="text/javascript" src="/scripts/plugins/snippet/jquery.snippet.js"></script>
+    <script type="text/javascript" src="/scripts/admin/cache/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/styles/ff/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/ff/global.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/plugins/snippet/jquery.snippet.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/admin/cache/index.css" />
+    <title>Кэш</title>
+  </head>
+  <body class="body">
+    <div class="adminSection-block">
+      
+      <div class="adminSection-topContainer displayFixed">
+	      <div class="adminSection-topMenuBlock">
+	        <span class="adminSection-topMenuItem"><a href="/admin/">Главная</a></span>
+	        <span class="adminSection-topMenuItem">Кэш</span> 	        
+	      </div>
+	      
+	      
+      
+				<div class="adminSection-menuItem"><a class="actionAnchor actionClearAllExceptSessions" href="#">очистить всё, кроме сессий</a><div class="adminSection-actionStatusText"></div></div>
+				<!--div class="adminSection-menuItem"><a class="actionAnchor actionClearOnlySessions" href="#">очистить только сессии</a><div class="adminSection-actionStatusText"></div></div>
+				<div class="adminSection-menuItem"><a class="actionAnchor actionClearOnlyTemplates" href="#">очистить только шаблоны</a><div class="adminSection-actionStatusText"></div></div-->
+				
+				<br />
+				<div class="adminSection-menuItem"><a class="actionAnchor actionClearAll" href="#">очистить всё</a><div class="adminSection-actionStatusText"></div></div>
+        <br />
+	      
+	      <div class="adminSection-cacheActionsBlock">
+	      	<div class="adminSection-menuItem"><input type="checkbox" id="data" data-prefix="data" class="jsPrefixSwitch" checked="checked" /> <label for="data">данные</label></div>	      	
+	      	<div class="adminSection-menuItem"><input type="checkbox" id="sessions" data-prefix="session" class="jsPrefixSwitch"/> <label for="sessions">сессии</label></div>	      	
+	      	<div class="adminSection-menuItem"><input type="checkbox" id="templates" data-prefix="template" class="jsPrefixSwitch" /> <label for="templates">шаблоны</label></div>
+	      	
+	      	<div class="adminSection-menuItem"><input type="text" value="" autocomplete="off" name="search" id="searchKey" placeholder="Поиск по имени ключа" class="searchKey" /></div>
+	      	<div class="adminSection-menuItem"><a class="actionAnchor actionSelectAll" href="#" data-action-type="select" id="selectAllSwitch">выделить все</a></div>
+	      	<div class="adminSection-menuItem"><a class="actionAnchor actionDeleteSelected" href="#">удалить выбранные</a></div>	      	
+	      	
+	      		      	
+	      </div>
+      </div> 
+      
+      
+      
+        <div class="adminSection-leftSideBar" id="cacheKeysList">
+          {$cacheKeysList}                                       
+        </div>
+        
+        <div class="adminSection-leftSideBar" id="searchResultList">                                                
+        </div>
+        
+        <div class="adminSection-rightSideBar displayFixed" id="cacheKeyContent">
+        
+                                               
+        </div>
+       
+        
+    </div>
+  </body>
+</html>

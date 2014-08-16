@@ -65,6 +65,12 @@ abstract class bmCMSPage extends bmHTMLPage
 		);
 	}
 
+	protected function includeConfig($moduleConfigPath)
+	{
+		$lastFoundConfigPath = projectRoot . 'conf/cms/' . $moduleConfigPath . '/module.json';
+		return json_decode(file_get_contents($lastFoundConfigPath), true);
+	}
+
 	/**
 	 *
 	 */
@@ -105,21 +111,160 @@ abstract class bmCMSPage extends bmHTMLPage
 		}
 	}
 
+	private function _recursionCloneObject(&$map, $object, $link = null, $parentObject = null)
+	{
+		$excludeField = ['identifier'];
+		$objectClone = null;
+		//Клонируем объект
+		if (array_key_exists('clone', $map) && $map['clone'])
+		{
+			$objectName = 'bm' . ucfirst($object->objectName);
+			$objectClone = new $objectName($this->application);
+
+			foreach ($objectClone->map as $key => $param)
+			{
+				if (in_array($key, $excludeField))
+				{
+					// Убираем поля которые уникальны для каждого объекта
+					continue;
+				}
+
+				// Поля которые должны генериться сами
+				if (array_key_exists('excludedFields', $map) && is_array($map['excludedFields']) && in_array($key, $map['excludedFields']))
+				{
+					$objectClone->{$key} = $param['defaultValue'];
+				}
+				else
+				{
+					// Переносим поля
+					$objectClone->{$key} = $object->{$key};
+				}
+			}
+
+			//Сохраняем чтобы получить id
+			$objectClone->save();
+		}
+
+		// Клонируем связи
+		if ($parentObject)
+		{
+			if($map['dataObject'] == 'image' && $link)
+			{
+				$obj = $objectClone ? $objectClone : $object;
+				$obj->addLinkObject($link['object'], $parentObject->identifier, $link['group']);
+			}
+			elseif($map['dataObject'] == 'file' && $link)
+			{
+				$obj = $objectClone ? $objectClone : $object;
+				$obj->addLinkObject($link['object'], $parentObject->identifier, $link['group']);
+			}
+			elseif ($link)
+			{
+				//не доделали пока :(
+			}
+			else
+			{
+				$objId = $objectClone ? $objectClone->identifier : $object->identifier;
+				$function = 'add' . ucfirst($map['dataObject']);
+				$param = [
+					$map['dataObject'] . 'Id' => $objId,
+				];
+				$parentObject->$function($param);
+			}
+		}
+
+
+		if (array_key_exists('children', $map) && is_array($map['children']) && array_key_exists('clone', $map) && $map['clone'])
+		{
+			foreach ($map['children'] as $newMap)
+			{
+				if($newMap['dataObject'] == 'image')
+				{
+					$method = 'getObjectImagesGroups';
+				}
+				elseif($newMap['dataObject'] == 'file')
+				{
+					$method = 'getObjectFilesGroups';
+				}
+				else
+				{
+					$method = 'get' . ucfirst($newMap['dataObject']) . 's';
+				}
+
+				$listLink = $object->$method();
+				if ($listLink)
+				{
+					foreach ($listLink as $link)
+					{
+						$linkMap = [];
+						if ($link instanceof bmDataObject)
+						{
+							$obj = $link;
+						}
+						else
+						{
+							$obj = $link->{$newMap['dataObject']};
+
+							foreach ($link as $key => $val)
+							{
+								if ($key == $newMap['dataObject'] || $key == $map['dataObject'])
+								{
+									continue;
+								}
+								$linkMap[$key] = $val;
+							}
+						}
+
+
+						$this->_recursionCloneObject(
+							$newMap,
+							$obj,
+							$linkMap,
+							$objectClone ? $objectClone : $object
+						);
+
+					}
+				}
+			}
+		}
+
+		return $objectClone ? $objectClone->identifier : $object->identifier;
+
+	}
+
+	private function _cloneObject ()
+	{
+		$output = new stdClass();
+		$output->id = $this->_recursionCloneObject($this->moduleConfig["cloneMap"], $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId));
+
+		return json_encode($output);
+	}
+
 	/**
 	 * @return string
 	 */
-	public function generate()
+	final public function generate()
 	{
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case "GET":
-				$param = $this->param2;
-				if ($param && is_string($param))
+				if (array_key_exists('archives', $_GET))
 				{
-					$param = explode('-', $param);
+					$param = explode('-', $_GET['archives']);
 					if (count($param) === 3 && $param[1] === 'archives')
 					{
 						return $this->archivesFiles($param[0], $param[2]);
+					}
+				}
+				else
+				{
+					if (method_exists($this, 'generateGET'))
+					{
+						$generate = $this->generateGET();
+						if ($generate)
+						{
+							return $generate;
+						}
 					}
 				}
 				if ($this->itemId)
@@ -132,6 +277,12 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				break;
 			case "POST":
+				if (array_key_exists('ajaxCms', $_POST))
+				{
+					$method = "_" . $_POST['ajaxCms'];
+					unset($_POST['ajaxCms']);
+					return $this->$method();
+				}
 				if (array_key_exists('images_file', $_POST))
 				{
 
@@ -148,10 +299,26 @@ abstract class bmCMSPage extends bmHTMLPage
 				}
 				elseif ($this->itemId)
 				{
+					if (method_exists($this, 'generatePOST'))
+					{
+						$generate = $this->generatePOST();
+						if ($generate)
+						{
+							return $generate;
+						}
+					}
 					return $this->saveForm();
 				}
 				break;
 			case "PUT":
+				if (method_exists($this, 'generatePUT'))
+				{
+					$generate = $this->generatePUT();
+					if ($generate)
+					{
+						return $generate;
+					}
+				}
 				return $this->createObject();
 				break;
 		}
@@ -237,10 +404,20 @@ abstract class bmCMSPage extends bmHTMLPage
 	 */
 	protected function displayList()
 	{
-		$this->templateVars['columns'] = $this->getFields(@$this->moduleConfig['list']['columns']);
+		$this->templateVars['columns'] = $this->getFields(@$this->moduleConfig['list']['columns'], $this->moduleConfig);
 		$this->templateVars['objects'] = @$this->application->data->getObjectsByType($this->moduleConfig['dataObject'], [], [], true);
 
 		return $this->renderTemplate('list.twig', $this->templateVars);
+	}
+
+	protected function displayFormNested($include)
+	{
+		$config = $this->includeConfig($include);
+		$templateVars = [
+			'objectName' => $config['dataObject'],
+			'fields' => $this->getFields(@$config['form']['fields'], $config)
+		];
+		return $templateVars;
 	}
 
 
@@ -256,18 +433,28 @@ abstract class bmCMSPage extends bmHTMLPage
 			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
 			$this->templateVars['objectData'] = $object;
 
-			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
+			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields'], $this->moduleConfig);
 			foreach ($this->templateVars['fields'] as $field => $fieldInfo)
 			{
 				if ($fieldInfo['type'] == 'custom')
 				{
 					$method = 'formElement' . ucfirst($field);
+					$class = 'bmCMC' . ucfirst($field);
 					if (method_exists($this, $method))
 					{
 						$this->templateVars['fields'][$field]['html'] = $this->{$method}($fieldInfo, $object);
+					} elseif (class_exists($class)) {
+						$class = new $class($fieldInfo, $object);
+						$this->templateVars['fields'][$field]['include'] = $class->template;
+						$this->templateVars['fields'][$field]['params'] = $class->getParams();
 					} else {
 						$this->templateVars['fields'][$field]['html'] = 'не доделали пока :(';
 					}
+				}
+
+				if ($fieldInfo['type'] == 'form')
+				{
+					$this->templateVars['fields'][$field] = array_merge($this->templateVars['fields'][$field], $this->displayFormNested($fieldInfo['include']));
 				}
 
 				if ($fieldInfo['type'] == 'relation')
@@ -289,6 +476,7 @@ abstract class bmCMSPage extends bmHTMLPage
 			return false;
 		}
 
+		$this->templateVars['cloneMap'] = array_key_exists('cloneMap', $this->moduleConfig);
 		$this->templateVars['errors'] = $this->getFlash("errors");
 
 		return $this->renderTemplate('form.twig', $this->templateVars);
@@ -305,7 +493,7 @@ abstract class bmCMSPage extends bmHTMLPage
 			$this->templateVars['group'] = $group;
 			$this->templateVars['type'] = $type;
 
-			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields']);
+			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields'], $this->moduleConfig);
 		}
 		else
 		{
@@ -326,7 +514,7 @@ abstract class bmCMSPage extends bmHTMLPage
 
 		if ($object)
 		{
-			$fields = $this->getFields(@$this->moduleConfig['form']['fields']);
+			$fields = $this->getFields(@$this->moduleConfig['form']['fields'], $this->moduleConfig);
 			//todo: бежать по полям из формы
 			foreach ($fields as $field => $fieldInfo)
 			{
@@ -362,6 +550,9 @@ abstract class bmCMSPage extends bmHTMLPage
 								}
 							}
 						}
+
+						break;
+					case 'include':
 
 						break;
 					case 'files':
@@ -476,9 +667,9 @@ abstract class bmCMSPage extends bmHTMLPage
 	 * Получение полноценного списка полей, с заполненной метаинформацией
 	 * @return array
 	 */
-	protected function getFields($list)
+	protected function getFields($list, $moduleConfig)
 	{
-		$className = 'bm' . ucfirst($this->moduleConfig['dataObject']);
+		$className = 'bm' . ucfirst($moduleConfig['dataObject']);
 		$object = new $className($this->application, array('readonly' => true));
 
 		if (isset($list) && is_array($list))
@@ -507,9 +698,9 @@ abstract class bmCMSPage extends bmHTMLPage
 			}
 			if (!isset($fields[$field]['title']))
 			{
-				if (isset($this->moduleConfig['titles'][$field]))
+				if (isset($moduleConfig['titles'][$field]))
 				{
-					$fields[$field]['title'] = $this->moduleConfig['titles'][$field];
+					$fields[$field]['title'] = $moduleConfig['titles'][$field];
 				}
 				else
 				{

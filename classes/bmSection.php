@@ -61,6 +61,18 @@
       {
         /*FF::AC::TOP::GETTER::{*/
         
+        /*FF::AC::GETTER_CASE::post::{*/
+        case 'postIds':
+          if (!array_key_exists('postIds', $this->properties))
+          {
+            $this->properties['postIds'] = $this->getPosts(false);
+          }
+          return $this->properties['postIds'];
+        break;
+        case 'posts':
+          return $this->getPosts();
+        break;
+        /*FF::AC::GETTER_CASE::post::}*/
  
         /*FF::AC::TOP::GETTER::}*/
         default:
@@ -71,6 +83,64 @@
     
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
     
+    /*FF::AC::REFERENCE_FUNCTIONS::post::{*/        
+        
+    public function getPosts($load = true)
+	{
+		$link = "link_post_section";
+		$param = [
+			'object' => 'post',
+			'fields' => [],
+		];
+		return parent::getMethodObjects($link, $param, $load);
+	}
+
+    /**
+	 * $param['postId']
+	 *
+	 * @param $param
+	 *
+	 * @return $this
+	 */
+	public function addPost($param)
+	{
+		return parent::addMethodObject('post', $param);
+	}
+
+	/**
+	 * @param $postId
+	 *
+	 * @return $this
+	 */
+	public function removePost($postId)
+	{
+		return parent::removeMethodObject('post', $postId, false);
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removePosts()
+	{
+		return parent::removesMethodObject('post');
+	}
+
+	/**
+	 * @return $this
+	 */
+	protected function savePosts()
+	{
+		$link = "link_post_section";
+		$param = [
+			'object' => 'post',
+			'fields' => [],
+			'objects' => [],
+		];
+		return parent::saveMethodObject($link, $param);
+	}
+    
+    /*FF::AC::REFERENCE_FUNCTIONS::post::}*/
+
 
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
     
@@ -80,6 +150,13 @@
     {
       
       
+      $posts = $this->posts;
+
+      foreach ($posts as $post)
+      {
+        $post->removeSection($this->properties['identifier']);
+      }
+
       
       
       $this->application->cacheLink->delete($this->objectName . '_' . $this->properties['identifier']); 

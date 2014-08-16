@@ -6,7 +6,7 @@ final class bmCMSIndexPage extends bmCMSPage
 	/**
 	 * @return string
 	 */
-	function generate()
+	function generateGET()
 	{
 		return $this->renderTemplate('index.twig', $this->templateVars);
 	}

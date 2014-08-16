@@ -2,6 +2,9 @@
 
   class bmSyncronizeDataObjects extends bmCustomRemoteProcedure
   {
+  	/*FF::AC::CGIPROPERTIES::{*/
+  	/*FF::AC::CGIPROPERTIES::}*/
+  	
 
     private $exceptions = array('dataObjectMap', 'dataObjectField', 'link_.+');
 
@@ -31,8 +34,8 @@
 
       while ($table = $qTables->nextRow())
       {
-        $dataObjectName = $table[0]; 
-        if (!$this->testException($dataObjectName)) 
+        $dataObjectName = $table[0];
+        if (!$this->testException($dataObjectName))
         {
           $identifier = $this->getObjectIdByField('dataObjectMap', 'name', $dataObjectName);
           $dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $identifier));
@@ -42,11 +45,10 @@
             $dataObjectMap->generateFields();
           }
           $dataObjectMap->generateFiles(C_ADMIN_ANCESTOR_PAGE);
-          unset($dataObjectField);
         }
         parent::execute();
       }
-      
+
     }
   }
 

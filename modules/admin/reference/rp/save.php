@@ -2,7 +2,12 @@
 
 class bmSaveReference extends bmCustomRemoteProcedure
 {
-	public $referenceId = 0;
+	/*FF::AC::CGIPROPERTIES::{*/
+
+	public $referenceId;
+
+	/*FF::AC::CGIPROPERTIES::}*/
+
 	private $dataFields = array();
 
 	public function __construct($application, $parameters = array())
@@ -150,7 +155,9 @@ class bmSaveReference extends bmCustomRemoteProcedure
 			{
 				if ($i != $j)
 				{
-					if ($this->dataFields[$i]->propertyName == $this->dataFields[$j]->propertyName || $this->dataFields[$i]->fieldName == $this->dataFields[$j]->fieldName)
+					if ($this->dataFields[$i]->propertyName == $this->dataFields[$j]->propertyName ||
+						$this->dataFields[$i]->fieldName == $this->dataFields[$j]->fieldName
+					)
 					{
 						echo 'Ошибка: не должно быть дублей имен свойств и полей.';
 						exit;
@@ -170,12 +177,13 @@ class bmSaveReference extends bmCustomRemoteProcedure
 
 	public function execute()
 	{
-		$dataLink = $this->application->dataLink;
-		$oldReferenceField = $itemsMapObject = [];
+		$dataLink = $this->application->dataLinkWrite;
+		$itemsMapObject = [];
+		$oldReferenceField = [];
 
 		if ($this->referenceId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLink);
+			$migration = new bmMigration($this->application->dataLinkWrite);
 			$referenceMap = new bmReferenceMap($this->application, array('identifier' => $this->referenceId), $migration);
 
 			foreach ($this->dataFields as &$item)
@@ -237,7 +245,6 @@ class bmSaveReference extends bmCustomRemoteProcedure
 					$referenceField->dataType = $item->dataType;
 					$referenceField->defaultValue = $item->defaultValue;
 					$referenceField->localName = $item->localName;
-
 					if ($item->referencedObjectId != 0)
 					{
 						$itemsMapObject[$item->fieldName] = $item->referencedObjectId;
@@ -270,13 +277,11 @@ class bmSaveReference extends bmCustomRemoteProcedure
 					}
 				}
 
-
 				$referenceMap->endUpdate();
 			}
+			$referenceMap->save();
+			$migration->generationMigration();
 		}
-
-		$referenceMap->save();
-		$migration->generationMigration();
 
 		parent::execute();
 	}

@@ -1,0 +1,55 @@
+{
+	"dataObject": "post",
+	"titles": {
+	},
+	"list": {
+		"columns": ["name", "url"]
+	},
+	"form": {
+		"fields": {
+			"name": true,
+			"url": true,
+			"order": true,
+			"active": true,
+			"text": {
+				"type": "redactor"
+			},
+			"gallery": {
+				"type": "images",
+				"title": "Галерея"
+			},
+			"section": {
+				"type": "form",
+				"method": "getSections",
+				"include": "post-objects/sections",
+				"title": "Группы"
+			},
+			"tag": {
+				"type": "relation",
+				"to": "tag",
+				"title": "Таги"
+			},
+			"text2": {
+				"type": "redactor"
+			}
+		}
+	},
+
+	"cloneMap": {
+		"dataObject": "post",
+		"excludedFields": ["url"],
+		"clone": true,
+		"children": [
+			{
+				"dataObject": "section"
+			},
+			{
+				"dataObject": "tag"
+			},
+			{
+				"dataObject": "image",
+				"clone": true
+			}
+		]
+	}
+}

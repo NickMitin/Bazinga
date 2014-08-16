@@ -1,0 +1,14 @@
+{
+	"dataObject": "section",
+	"titles": {
+	},
+	"list": {
+		"columns": ["name", "url"]
+	},
+	"form": {
+		"fields": {
+			"name": true,
+			"url": true
+		}
+	}
+}

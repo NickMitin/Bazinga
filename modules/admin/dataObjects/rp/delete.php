@@ -2,7 +2,12 @@
 
 class bmDeleteDataObject extends bmCustomRemoteProcedure
 {
-	public $dataObjectMapId = 0;
+	/*FF::AC::CGIPROPERTIES::{*/
+
+	public $dataObjectMapId;
+
+	/*FF::AC::CGIPROPERTIES::}*/
+
 
 	public function execute()
 	{
@@ -14,15 +19,18 @@ class bmDeleteDataObject extends bmCustomRemoteProcedure
 
 		if ($this->dataObjectMapId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLink);
+			$migration = new bmMigration($this->application->dataLinkWrite);
 			$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $this->dataObjectMapId), $migration);
 
 			$dataObjectMap->delete();
-			$migration->generationMigration();
+
 		}
+		unset($dataObjectMap);
+
 
 		parent::execute();
 	}
 
 }
 
+?>

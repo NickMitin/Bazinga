@@ -1,6 +1,6 @@
-<?php 
-  
-  /*
+<?php
+
+/*
   * Copyright (c) 2014, "The Blind Mice Studio"
   * All rights reserved.
   * 
@@ -28,11 +28,11 @@
   * 
   */
 
-  final class bmPost extends bmDataObject
-  {
-    public function __construct($application, $parameters = array())
-    {
-      /*FF::AC::MAPPING::{*/
+final class bmPost extends bmDataObject
+{
+	public function __construct($application, $parameters = array())
+	{
+		/*FF::AC::MAPPING::{*/
 
       $this->objectName = 'post';
       $this->map = array_merge($this->map, array(
@@ -54,40 +54,194 @@
 				'active' => array(
 					'fieldName' => 'active',
 					'dataType' => BM_VT_INTEGER,
-					'defaultValue' => 0
+					'defaultValue' => 1
+				),
+				'text' => array(
+					'fieldName' => 'text',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
+				),
+				'text2' => array(
+					'fieldName' => 'text2',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
 				)
       ));
 
       /*FF::AC::MAPPING::}*/
 
-      parent::__construct($application, $parameters);
-    }
+		parent::__construct($application, $parameters);
+	}
 
-    public function __get($propertyName)
-    {
-      $this->checkDirty();
-      
-      switch ($propertyName)
-      {
-        /*FF::AC::TOP::GETTER::{*/
+	public function __get($propertyName)
+	{
+		$this->checkDirty();
+
+		switch ($propertyName)
+		{
+			/*FF::AC::TOP::GETTER::{*/
         
+        /*FF::AC::GETTER_CASE::section::{*/
+        case 'sectionIds':
+          if (!array_key_exists('sectionIds', $this->properties))
+          {
+            $this->properties['sectionIds'] = $this->getSections(false);
+          }
+          return $this->properties['sectionIds'];
+        break;
+        case 'sections':
+          return $this->getSections();
+        break;
+        /*FF::AC::GETTER_CASE::section::}*/
+        /*FF::AC::GETTER_CASE::tag::{*/
+        case 'tagIds':
+          if (!array_key_exists('tagIds', $this->properties))
+          {
+            $this->properties['tagIds'] = $this->getTags(false);
+          }
+          return $this->properties['tagIds'];
+        break;
+        case 'tags':
+          return $this->getTags();
+        break;
+        /*FF::AC::GETTER_CASE::tag::}*/
  
         /*FF::AC::TOP::GETTER::}*/
-        default:
-          return parent::__get($propertyName);
-        break;
-      }
-    }
+			default:
+				return parent::__get($propertyName);
+				break;
+		}
+	}
+
+	/*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
     
-    /*FF::AC::TOP::REFERENCE_FUNCTIONS::{*/
+    /*FF::AC::REFERENCE_FUNCTIONS::section::{*/        
+        
+    public function getSections($load = true)
+	{
+		$link = "link_post_section";
+		$param = [
+			'object' => 'section',
+			'fields' => [],
+		];
+		return parent::getMethodObjects($link, $param, $load);
+	}
+
+    /**
+	 * $param['sectionId']
+	 *
+	 * @param $param
+	 *
+	 * @return $this
+	 */
+	public function addSection($param)
+	{
+		return parent::addMethodObject('section', $param);
+	}
+
+	/**
+	 * @param $sectionId
+	 *
+	 * @return $this
+	 */
+	public function removeSection($sectionId)
+	{
+		return parent::removeMethodObject('section', $sectionId, false);
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeSections()
+	{
+		return parent::removesMethodObject('section');
+	}
+
+	/**
+	 * @return $this
+	 */
+	protected function saveSections()
+	{
+		$link = "link_post_section";
+		$param = [
+			'object' => 'section',
+			'fields' => [],
+			'objects' => [],
+		];
+		return parent::saveMethodObject($link, $param);
+	}
     
+    /*FF::AC::REFERENCE_FUNCTIONS::section::}*/
+
+    /*FF::AC::REFERENCE_FUNCTIONS::tag::{*/        
+        
+    public function getTags($load = true)
+	{
+		$link = "link_post_tag";
+		$param = [
+			'object' => 'tag',
+			'fields' => [],
+		];
+		return parent::getMethodObjects($link, $param, $load);
+	}
+
+    /**
+	 * $param['tagId']
+	 *
+	 * @param $param
+	 *
+	 * @return $this
+	 */
+	public function addTag($param)
+	{
+		return parent::addMethodObject('tag', $param);
+	}
+
+	/**
+	 * @param $tagId
+	 *
+	 * @return $this
+	 */
+	public function removeTag($tagId)
+	{
+		return parent::removeMethodObject('tag', $tagId, false);
+	}
+
+	/**
+	 * @return $this
+	 */
+	public function removeTags()
+	{
+		return parent::removesMethodObject('tag');
+	}
+
+	/**
+	 * @return $this
+	 */
+	protected function saveTags()
+	{
+		$link = "link_post_tag";
+		$param = [
+			'object' => 'tag',
+			'fields' => [],
+			'objects' => [],
+		];
+		return parent::saveMethodObject($link, $param);
+	}
+    
+    /*FF::AC::REFERENCE_FUNCTIONS::tag::}*/
+
 
     /*FF::AC::TOP::REFERENCE_FUNCTIONS::}*/
-    
-    /*FF::AC::DELETE_FUNCTION::{*/        
+
+	/*FF::AC::DELETE_FUNCTION::{*/        
         
     public function delete()
     {
+      $this->removeSections();
+
+      $this->removeTags();
+
       
       
       
@@ -104,6 +258,6 @@
     }
     
     /*FF::AC::DELETE_FUNCTION::}*/
-  }
-  
+}
+
 ?>

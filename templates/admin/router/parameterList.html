@@ -1,18 +1,20 @@
+<tr><td colspan="*">&nbsp;</td></tr>
 <tr>
-  <td>Параметры</td>
+  <td><b>Параметры</b></td>
   <td>&nbsp;</td>
-  
 </tr>
 <tr>
-  <td colspan="2" style="padding-left: 50px;">
-    <table id="parameters_{$i}">
+  <td colspan="2">
+    <table class="adminSection-routerParametersTable" id="parameters_{$i}">
       <tbody>
-        $parameters
-        <tr id="addLink">
-          <td>&nbsp;</td>
-          <td><a class="addParameter" data-index="$i" href="">+ добавить</a></td>
+
+        {$parameters}
+
+        <tr>
+          <td class="parameterNameBlock">&nbsp;</td>
+          <td colspan="6"><div class="adminSection-routerParametersTable-addParameterBlock"><a class="addParameter actionAnchor" data-index="{$i}" href="">добавить</a></div></td>
         </tr>
       </tbody>
     </table>
-  </td>  
+  </td>
 </tr>

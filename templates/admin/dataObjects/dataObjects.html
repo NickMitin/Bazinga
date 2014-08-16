@@ -1,16 +1,45 @@
-<h1>Дата-объекты</h1>
-<form action="/admin/dataObjects/rp/save/" method="post">
-<table>
-<thead>
-<tr><th>Название</th><th>Действия</th></tr>
-</thead>
-<tbody>
-$objectList
-<tr><td>добавить</td><td>&nbsp;</td></tr>
-$newDataObjectMap
-</tbody>
-</table>
-<div>
-<button type="submit">Сохранить</button>
-</div>
-</form>
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/styles/ff/reset.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/ff/global.css" />
+	  {$this->metaData}
+    <title>Дата-объекты</title>
+  </head>
+  <body class="body">
+
+    <div class="adminSection-block">
+      <div class="adminSection-topMenuBlock">
+        <span class="adminSection-topMenuItem"><a href="/admin/">Главная</a></span>
+        <span class="adminSection-topMenuItem">Дата-объекты</span>
+      </div>
+
+      <div class="adminSection-contentBlock">
+        <form action="/admin/dataObjects/rp/save/" method="post">
+        <table class="adminSection-fieldsTable">
+        <thead>
+        <tr><th>Название</th><th class="adminSection-actionsBlock">Действия</th></tr>
+        </thead>
+        <tbody>
+
+        {$objectList}
+
+        <tr><td colspan="2"><br /></td></tr>
+        <tr><td>добавить</td><td>&nbsp;</td></tr>
+
+        {$newDataObjectMap}
+
+        </tbody>
+        </table>
+        <br /><br />
+        <div>
+          <button type="submit">Сохранить</button>
+        </div>
+        <!--<div><a href="/admin/dataObjects/rp/syncronize/">Синхронизировать</a></div>-->
+        </form>
+      </div>
+    </div>
+
+  </body>
+</html>

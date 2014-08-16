@@ -1,94 +1,43 @@
-    public function add{$ucPropertyName}(\${$propertyName}Id)
-    {
-      \${$propertyName}Ids = \$this->{$propertyName}Ids;
-      
-      if (!in_array(\${$propertyName}Id, \${$propertyName}Ids))
-      {
-        \$this->properties['{$propertyName}Ids'][] = \${$propertyName}Id;
-      }
-      
-      \$this->dirty['save{$ucPropertyName}s'] = true;
-    }
+/**
+{$param}
+	 *
+	 * @param \$param
+	 *
+	 * @return \$this
+	 */
+	public function add{$ucPropertyName}(\$param)
+	{
+		return parent::addMethodObject('{$object}', \$param);
+	}
 
-    public function remove{$ucPropertyName}(\${$propertyName}Id)
-    {
-      \${$propertyName}Ids = \$this->{$propertyName}Ids;
-      
-      foreach (\${$propertyName}Ids as \$key => \$identifier)
-      {
-        if (\$identifier == \${$propertyName}Id)
-        {
-          unset(\$this->properties['{$propertyName}Ids'][\$key]);
-        }
-      }
-      
-      \$this->dirty['save{$ucPropertyName}s'] = true;
-    }
+	/**
+	 * @param \${$object}Id
+	 *
+	 * @return \$this
+	 */
+	public function remove{$ucPropertyName}(\${$object}Id)
+	{
+		return parent::removeMethodObject('{$object}', \${$object}Id, false);
+	}
 
-    public function remove{$ucPropertyName}s()
-    {
-      \$this->properties['{$propertyName}Ids'] = array();
-      
-      \$this->dirty['save{$ucPropertyName}s'] = true;
-    }
+	/**
+	 * @return \$this
+	 */
+	public function remove{$ucPropertyName}s()
+	{
+		return parent::removesMethodObject('{$object}');
+	}
 
-    protected function save{$ucPropertyName}s()
-    {
-      \$dataLink = \$this->application->dataLink;
-      \$cacheLink = \$this->application->cacheLink;
-      
-      \$cacheKeysToDelete = array();
-      \$cacheKeysToDelete[] = '{$objectName}_{$propertyName}s_' . \$this->properties['identifier']; 
-      
-      \$old{$ucPropertyName}Ids = \$this->properties['old{$ucPropertyName}Ids'];
-      \${$propertyName}Ids = \$this->properties['{$propertyName}Ids'];
-      
-      \$idsToDelete = array_diff(\$old{$ucPropertyName}Ids, \${$propertyName}Ids);
-      \$idsToAdd = array_diff(\${$propertyName}Ids, \$old{$ucPropertyName}Ids);
-      
-      foreach (\$idsToDelete as \$idToDelete)
-      {
-        \$cacheKeysToDelete[] = '{$otherObjectPropertyName}_{$objectName}s_' . \$idToDelete;
-      }
-      
-      foreach (\$cacheKeysToDelete as \$cacheKey)
-      {
-        \$cacheLink->delete(\$cacheKey);
-      }
-      
-      if (count(\$idsToDelete) > 0)
-      {
-        \$sql = "
-          DELETE FROM 
-            `{$tableName}`
-          WHERE 
-            `{$thisObjectFieldName}` = " . \$this->properties['identifier'] . "
-            AND `{$otherObjectFieldName}` IN (" . implode(', ', \$idsToDelete) . ");";
-        
-        \$dataLink->query(\$sql);
-      }
-      
-      \$insertStrings = array();
-      
-      foreach (\$idsToAdd as \$identifier)
-      { 
-        \$insertStrings[] = '(' . \$dataLink->formatInput(\$this->properties['identifier'], BM_VT_INTEGER) . ", " . \$dataLink->formatInput(\$identifier, BM_VT_INTEGER) . ')';
-      }
-      
-      if (count(\$insertStrings) > 0)
-      {
-        \$sql = "INSERT IGNORE INTO
-                  `{$tableName}`
-                  ({$sqlFields})
-                VALUES
-                  " . implode(', ', \$insertStrings) . ";";
-                  
-        \$dataLink->query(\$sql);
-      }
-      
-      \$this->enqueueCache('save{$ucPropertyName}s');
-      \$this->dirty['save{$ucPropertyName}s'] = false;
-      
-      \$this->properties['old{$ucPropertyName}Ids'] = \$this->properties['{$propertyName}Ids'];
-    }
-    
+	/**
+	 * @return \$this
+	 */
+	protected function save{$ucPropertyName}s()
+	{
+		\$link = "{$link}";
+		\$param = [
+			'object' => '{$object}',
+			'fields' => [],
+			'objects' => [],
+		];
+		return parent::saveMethodObject(\$link, \$param);
+	}

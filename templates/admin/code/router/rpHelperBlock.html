@@ -1,0 +1,21 @@
+    /**
+     * @warn Uncomment these lines below if you want to restrict acces for this procedure.
+     */
+
+/*
+    if (\$this->application->user->type < 100)
+    {
+      echo 'Недостаточно прав доступа';
+      exit;
+    }
+*/
+
+    /**
+     * @warn Procedure properties, see bmCustomRemoteProcedure class.
+     */
+
+/*
+    \$this->type = BM_RP_TYPE_ ... (choose proper type) // procedure type
+    \$this->output = new stdClass();                    // for JSON procedures
+    \$this->returnTo = '/';                             // for redirect after execution
+*/

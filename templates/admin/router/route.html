@@ -1,24 +1,38 @@
-<tr>
-  <td style="line-height: 50px; height: 50px;">&nbsp;</td>
-  <td>&nbsp;</td>
-  
-</tr>
-<tr>
-  <td colspan="2"><h3>$route</h3></td>
-  
-</tr>
-<tr>
-  <td>Путь</td>
-  <td><input type="text" style="width: 300px;" name="route[{$i}]" value="{$route}" /></td>
-  
-</tr>
-<tr>
-  <td>Файл</td>
-  <td><input type="text" style="width: 300px;" name="routePath[{$i}]" value="{$routeData['route']}" /></td>
-</tr>
-<tr>
-  <td>Класс</td>
-  <td><input type="text" name="routeClass[{$i}]" value="{$routeData['class']}" /></td>
-</tr>
+<div class="adminSection-parametersList-ItemBlock {$hiddenBlockClass}" data-index="{$i}">
+  <div class="adminSection-parametersList-spoiler adminSection-parametersList-spoilerClosed">
+    <div class="adminSection-parametersList-routePattern">{$route}</div>
+    <div class="adminSection-parametersList-spoilerContent">
+      <div class="adminSection-parametersList-removeRoute"><a data-index="{$i}" href="" class="removeRoute actionAnchor">удалить</a></div>
+      <br />
+      <input type="hidden" name="changedRouteIndexes[{$i}]" value="0" />
+      <table class="adminSection-fieldsTable adminSection-routerPropertiesTable">
+        <tr>
+          <td class="parameterNameBlock">Путь</td>
+          <td class="parameterValueBlock"><input type="text" name="route[{$i}]" value="{$route}" /></td>
+        </tr>
+        <tr>
+          <td class="parameterNameBlock">Файл</td>
+          <td class="parameterValueBlock"><input type="text" name="routePath[{$i}]" value="{$routeData['route']}" /></td>
+        </tr>
+        <tr>
+          <td class="parameterNameBlock">Класс</td>
+          <td class="parameterValueBlock"><input type="text" name="routeClass[{$i}]" value="{$routeData['class']}" /></td>
+        </tr>
+        <tr>
+          <td class="parameterNameBlock">Базовый класс</td>
+          <td class="parameterValueBlock">
+          
+          {$baseClassNameSelector}
+          
+          </td>
+        </tr>
 
-$parametersList
+        {$parametersList}
+
+        <tr>
+          <td colspan="2"><br /><br /><br /></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

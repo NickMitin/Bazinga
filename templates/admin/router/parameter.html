@@ -1,13 +1,9 @@
 <tr>
-  <td>Имя</td>
+  <td class="parameterNameBlock">Имя</td>
   <td><input type="text" name="routeParameterName[{$i}][]" value="{$name}" /></td>
-  
-</tr>
-<tr>
+  <td>&nbsp;&nbsp;</td>
   <td>Значение</td>
-  <td>$routeParameterType</td>
-</tr>
-<tr>
-  <td style="height: 20px; line-height: 20px;">&nbsp;</td>
-  <td>&nbsp;</td>
+  <td>{$routeParameterType}</td>
+  <td>&nbsp;&nbsp;</td>
+  <td><a class="removeParameter actionAnchor" href="" data-index="{$i}">удалить</a></td>
 </tr>

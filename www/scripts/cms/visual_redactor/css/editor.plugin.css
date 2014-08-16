@@ -1,0 +1,220 @@
+.fileupload{
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	opacity: 0;
+	-ms-filter: 'alpha(opacity=0)';
+	font-size: 200px;
+	direction: ltr;
+	cursor: pointer;
+}
+
+.add_photo_btn{
+	width: 47px;
+	height: 37px;
+	background: url('../images/addPhotoBtn.png') 0 0;
+	cursor: pointer;
+	position: relative;
+	overflow: hidden;
+	float: left;
+}
+.add_photo_btn:hover{
+	background-position: 0 -37px;
+}
+
+.editor_menu{
+	position: absolute;
+	background: #000000;
+	border-radius: 3px;
+	box-sizing: border-box;
+	min-width: 300px;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	display: none;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.editor_menu ul{
+	cursor: default;
+	margin: 7px 10px;
+	padding: 0;
+	height: 24px;
+}
+.editor_menu .tail{
+	width: 9px;
+	height: 9px;
+	background: black;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	z-index: -1;
+	bottom: -4px;
+	position: absolute;
+}
+
+.editor_menu li{
+	height: 24px;
+	width: 24px;
+	margin: 0;
+	float: left;
+}
+.editor_menu li.separator{
+	width: 5px;
+}
+.editor_menu li:not(.separator){
+	cursor: pointer;
+	background-image: url('../images/editorMenuSprite.png');
+	background-color: white;
+}
+.editor_menu li[data-action="bold"]{
+	background-position: -8px -6px;
+}
+.editor_menu li[data-action="italic"]{
+	background-position: -35px -6px;
+}
+.editor_menu li[data-action="underline"]{
+	background-position: -58px -6px;
+}
+.editor_menu li[data-action="link"]{
+	background-position: -93px -6px;
+}
+.editor_menu li[data-action="justifyleft"]{
+	background-position: -128px -6px;
+}
+.editor_menu li[data-action="justifycenter"]{
+	background-position: -150px -6px;
+}
+.editor_menu li[data-action="justifyright"]{
+	background-position: -172px -6px;
+}
+.editor_menu li[data-action="font_size"][data-parameter="small"]{
+	background-position: -203px -6px;
+}
+.editor_menu li[data-action="font_size"][data-parameter="middle"]{
+	background-position: -225px -6px;
+}
+.editor_menu li[data-action="font_size"][data-parameter="large"]{
+	background-position: -250px -6px;
+}
+.editor_menu li[data-action="blockquote"]{
+	background-position: -285px -6px;
+}
+
+.inTextImage{
+	display: inline-block;
+	width: 480px;
+	height: 360px;
+	border: 1px #e6e6e6 solid;
+	background: url('../images/loader.gif') center center no-repeat;
+	position: relative;
+	margin-bottom: 30px;
+	max-width: 520px;
+}
+.inTextImage > .controls{
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.inTextImage > .controls > .control{
+	float: right;
+	width: 20px;
+	height: 20px;
+	margin-left: 1px;
+	background-color: #e6e6e6;
+	cursor: pointer;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+.inTextImage > .controls > .control[data-action="remove"]{
+	background-image: url('../images/close.png');
+}
+.inTextImage > .controls > .control[data-action="rotateLeft"]{
+	background-image: url('../images/rotate-left.png');
+}
+.inTextImage > .controls > .control[data-action="rotateRight"]{
+	background-image: url('../images/rotate-right.png');
+}
+.inTextImage img{
+	max-width: 520px;
+}
+
+.image_description{
+	width: 100%;
+}
+
+.image_description > input,
+.image_description > label{
+	font-family: 'Arial';
+	font-style: italic;
+	font-size: 12px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+.image_description > input{
+	cursor: text;
+}
+
+.image_description > .description{
+	float: left;
+	width: 60%;
+	color:    #767676;
+}
+
+.image_description > .author{
+	float: right;
+	text-align: right;
+	color:    #000000;
+	width: 38%;
+}
+
+.cke_widget_element{
+	outline: none!important;
+}
+
+div.cke_textarea_inline[contenteditable="true"]{
+	min-height: 90px;
+	border: 1px gray solid;
+}
+div.cke_textarea_inline[contenteditable="true"].placeholder,
+textarea:not(:focus){
+	cursor: pointer;
+}
+
+.upload_area{
+	height: 37px;
+	width: 190px;
+	border: 2px dotted rgb(194, 189, 189);
+	padding: 20px 23px 25px 25px;
+}
+
+.media_elements_adder{
+	height: 47px;
+	width: 140px;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+div.cke_textarea_inline p{
+	margin: 0 0 10px 0;
+}
+
+imgg{
+	width: 480px;
+	height: 360px;
+	display: block;
+}
+
+.container{
+	position: relative;
+}

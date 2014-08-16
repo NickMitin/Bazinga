@@ -1,0 +1,69 @@
+{% if fieldParams.type == 'password' %}
+	<input type="password" class="text password" name="cms-form-item[{{ field }}]"/>
+{% elseif fieldParams.type == 'checkbox' %}
+	<label>
+		<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
+	</label>
+{% elseif fieldParams.type == 'datetime' %}
+	{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
+	<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
+{% elseif fieldParams.type == 'redactor' %}
+	<div class="wsRedactor">
+		<textarea id="redactor-{{ field }}-{{ objectData.getProperty('identifier') }}" name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
+	</div>
+{% elseif fieldParams.type == 'text' %}
+	<textarea name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
+{% elseif fieldParams.type == 'custom' %}
+	{% autoescape false %}
+	{{ fieldParams.html }}
+	{% endautoescape %}
+{% elseif fieldParams.type == 'form' %}
+	<div class="courses-list-container">
+		<table class="courses-list">
+			{% for object in objectData.getAnonymous(fieldParams.method) %}
+				<tr>
+					{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
+						<td class="caption">
+							<div class="caption">{{ fieldParamsChildren.title }}</div>
+						</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
+						<td class="field">
+							{% include 'fields/form.twig' with {'field': fieldChildren, 'fieldParams': fieldParamsChildren, 'objectData': object}  %}
+						</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+{% elseif fieldParams.type == 'relation' %}
+	{% if fieldParams.cardinality == 'one' %}
+		<select class="text" name="cms-form-item-relation[{{ field }}]">
+			<option></option>
+			{% for id,name in fieldParams.items %}
+				<option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
+					{{ name }}
+				</option>
+			{% endfor %}
+		</select>
+	{% else %}
+		<ul>
+			{% for id,name in fieldParams.items %}
+				<li>
+					<label>
+						<input type="checkbox" name="cms-form-item-relation[{{ field }}][{{ id }}]" value="1" {% if id in fieldParams.bindedItems %}checked{% endif %} />
+						{{ name }}
+					</label>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% elseif fieldParams.type == 'images' or fieldParams.type == 'image' %}
+	{% include 'fields/images.twig' %}
+{% elseif fieldParams.type == 'files' %}
+	{% include 'fields/files.twig' %}
+{% else %}
+	<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
+{% endif %}

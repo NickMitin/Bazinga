@@ -2,6 +2,9 @@
 
 class bmSaveDataObjects extends bmCustomRemoteProcedure
 {
+	/*FF::AC::CGIPROPERTIES::{*/
+	/*FF::AC::CGIPROPERTIES::}*/
+
 
 	private $dataObjectNames = array();
 
@@ -24,12 +27,12 @@ class bmSaveDataObjects extends bmCustomRemoteProcedure
 		{
 			if ($dataObjectMapId != 0 || $dataObjectName != '')
 			{
-
 				$dataObjectName = trim($dataObjectName);
+
 				$pattern = '/^[a-zA-Z][a-zA-Z0-9]+$/';
 				if (preg_match($pattern, $dataObjectName))
 				{
-					$migration = new bmMigration($this->application->dataLink);
+					$migration = new bmMigration($this->application->dataLinkWrite);
 					$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $dataObjectMapId), $migration);
 					$dataObjectMap->beginUpdate();
 
@@ -48,6 +51,9 @@ class bmSaveDataObjects extends bmCustomRemoteProcedure
 				}
 			}
 		}
+
+
+
 		parent::execute();
 	}
 

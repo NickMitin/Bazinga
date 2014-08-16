@@ -2,7 +2,12 @@
 
 class bmSaveDataObject extends bmCustomRemoteProcedure
 {
-	public $dataObjectId = 0;
+	/*FF::AC::CGIPROPERTIES::{*/
+
+	public $dataObjectId;
+
+	/*FF::AC::CGIPROPERTIES::}*/
+
 
 	private $dataFields = array();
 
@@ -93,13 +98,21 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 				{
 					$currentItem->action = 'delete';
 				}
-				elseif ($currentItem->identifier == 0)
+				else
 				{
-					$currentItem->action = 'add';
-				}
-				elseif ($currentItem->oldFieldName != $currentItem->fieldName || $currentItem->oldDataType != $currentItem->dataType || $currentItem->oldDefaultValue != $currentItem->defaultValue)
-				{
-					$currentItem->action = 'change';
+					if ($currentItem->identifier == 0)
+					{
+						$currentItem->action = 'add';
+					}
+					else
+					{
+						if ($currentItem->oldFieldName != $currentItem->fieldName || $currentItem->oldDataType != $currentItem->dataType ||
+							$currentItem->oldDefaultValue != $currentItem->defaultValue
+						)
+						{
+							$currentItem->action = 'change';
+						}
+					}
 				}
 			}
 		}
@@ -112,7 +125,9 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 			{
 				if ($i != $j)
 				{
-					if ($this->dataFields[$i]->propertyName == $this->dataFields[$j]->propertyName || $this->dataFields[$i]->fieldName == $this->dataFields[$j]->fieldName)
+					if ($this->dataFields[$i]->propertyName == $this->dataFields[$j]->propertyName ||
+						$this->dataFields[$i]->fieldName == $this->dataFields[$j]->fieldName
+					)
 					{
 						echo 'Ошибка: не должно быть дублей имен свойств и полей.';
 						exit;
@@ -138,58 +153,16 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 
 	public function execute()
 	{
-		$dataLink = $this->application->dataLink;
 		$oldDataObjectField = [];
-
 		if ($this->dataObjectId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLink);
+			$migration = new bmMigration($this->application->dataLinkWrite);
 			$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $this->dataObjectId), $migration);
 
 			foreach ($this->dataFields as &$item)
 			{
 				if ($item->action != 'delete')
 				{
-					$inflectionNames = array(
-						'nominative',
-						'genitive',
-						'dative',
-						'accusive',
-						'creative',
-						'prepositional'
-					);
-					if ($item->localName != '')
-					{
-						$inflections = file_get_contents('http://export.yandex.ru/inflect.xml?name=' . urlencode($item->localName));
-						$xml = simplexml_load_string($inflections);
-						$inflections = array();
-						if (count($xml->inflection) == 6)
-						{
-							$i = 0;
-							foreach ($xml->inflection as $inflection)
-							{
-								$inflections[$inflectionNames[$i]] = (string)$inflection;
-								$i++;
-							}
-						}
-						else
-						{
-							foreach ($inflectionNames as $i => $inflection)
-							{
-								$inflections[$inflectionNames[$i]] = (string)$xml->inflection;
-							}
-						}
-					}
-					else
-					{
-						$inflections = array();
-						foreach ($inflectionNames as $i => $inflection)
-						{
-							$inflections[$inflectionNames[$i]] = $item->propertyName;
-						}
-					}
-					$item->localName = serialize($inflections);
-
 					if ($item->dataType == BM_VT_DATETIME)
 					{
 						if (!preg_match('/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$/', $item->defaultValue))
@@ -227,11 +200,13 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 
 				$dataObjectMap->endUpdate();
 			}
+
+			$dataObjectMap->save();
+			$migration->generationMigration();
+			unset($dataObjectMap);
 		}
 
-		$dataObjectMap->save();
-		$dataObjectMap->generateFiles();
-		$migration->generationMigration();
+
 
 		parent::execute();
 	}

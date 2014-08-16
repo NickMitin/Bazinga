@@ -3,13 +3,19 @@
 		<script>window.FileAPI = { staticPath: '/scripts/cms/fileApi/' };</script>
 		<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
 		<script src="/scripts/cms/file.js"></script>
+		<script src="/scripts/cms/visual_redactor/ckeditor4.4/ckeditor.js"></script>
+		<script src="/scripts/cms/visual_redactor/jquery/jquery.ui.widget.js"></script>
+		<script src="/scripts/cms/visual_redactor/jquery/jquery.fileupload.js"></script>
+		<script src="/scripts/cms/visual_redactor/jquery/jquery.iframe-transport.js"></script>
+		<script src="/scripts/cms/visual_redactor/js/editor.plugin.js"></script>
 	{% endblock %}
 	{% block cssFile %}
 		<link rel="stylesheet" href="/styles/cms/file.css"/>
+		<link rel="stylesheet" rev="stylesheet" type="text/css" href="/scripts/cms/visual_redactor/css/editor.plugin.css" />
 	{% endblock %}
 	{% block moduleContent %}
 		<div class="cms-module-form">
-			<form action="./" enctype="multipart/form-data" method="post">
+			<form id="SaveForm" action="./" enctype="multipart/form-data" method="post">
 				<table>
 					{% if errors %}
 						<tr>
@@ -29,50 +35,7 @@
 								<div class="caption">{{ fieldParams.title }}</div>
 							</td>
 							<td class="field">
-								{% if fieldParams.type == 'password' %}
-									<input type="password" class="text password" name="cms-form-item[{{ field }}]"/>
-								{% elseif fieldParams.type == 'checkbox' %}
-									<label>
-										<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
-									</label>
-								{% elseif fieldParams.type == 'datetime' %}
-									{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
-									<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
-								{% elseif fieldParams.type == 'text' %}
-									<textarea name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
-								{% elseif fieldParams.type == 'custom' %}
-									{% autoescape false %}
-									{{ fieldParams.html }}
-									{% endautoescape %}
-								{% elseif fieldParams.type == 'relation' %}
-									{% if fieldParams.cardinality == 'one' %}
-										<select class="text" name="cms-form-item-relation[{{ field }}]">
-											<option></option>
-											{% for id,name in fieldParams.items %}
-												<option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
-													{{ name }}
-												</option>
-											{% endfor %}
-										</select>
-									{% else %}
-										<ul>
-											{% for id,name in fieldParams.items %}
-												<li>
-													<label>
-														<input type="checkbox" name="cms-form-item-relation[{{ field }}][{{ id }}]" value="1" {% if id in fieldParams.bindedItems %}checked{% endif %} />
-														{{ name }}
-													</label>
-												</li>
-											{% endfor %}
-										</ul>
-									{% endif %}
-								{% elseif fieldParams.type == 'images' or fieldParams.type == 'image' %}
-									{% include 'fields/images.twig' %}
-								{% elseif fieldParams.type == 'files' %}
-									{% include 'fields/files.twig' %}
-								{% else %}
-									<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
-								{% endif %}
+								{% include 'fields/form.twig' with {'field': field, 'fieldParams': fieldParams}  %}
 							</td>
 						</tr>
 					{% endfor %}
@@ -81,6 +44,9 @@
 						<td>
 							<div class="form-buttons">
 								<input type="submit" value="Save"/>
+								{% if cloneMap %}
+									<input type="submit" name="clone-map" value="Clone"/>
+								{% endif %}
 							</div>
 						</td>
 					</tr>

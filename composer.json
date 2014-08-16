@@ -1,5 +1,8 @@
 {
+	"name": "detisoft/deticms-basic",
+	"minimum-stability": "dev",
     "require": {
+		"php": ">=5.4.0",
         "twig/twig": "1.*",
 		"sybio/image-workshop": "dev-master"
     }

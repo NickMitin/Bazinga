@@ -2,7 +2,12 @@
 
 class bmDeleteReference extends bmCustomRemoteProcedure
 {
-	public $referenceMapId = 0;
+	/*FF::AC::CGIPROPERTIES::{*/
+
+	public $referenceMapId;
+
+	/*FF::AC::CGIPROPERTIES::}*/
+
 
 	public function execute()
 	{
@@ -14,12 +19,15 @@ class bmDeleteReference extends bmCustomRemoteProcedure
 
 		if ($this->referenceMapId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLink);
+			$migration = new bmMigration($this->application->dataLinkWrite);
 			$referenceMap = new bmReferenceMap($this->application, array('identifier' => $this->referenceMapId), $migration);
 
 			$referenceMap->delete();
 			$migration->generationMigration();
+
 		}
+		unset($referenceMap);
+
 
 		parent::execute();
 	}

@@ -1,34 +1,275 @@
-body
-{
-  font-family: Arial;
-  margin-left: 1em;
+body { font-family: Arial; margin-left: 1em; }
+
+
+
+.hidden, .hiddenTemplates { display: none; }
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	user-select: none;
 }
-.dataObject_name, reference_name
-{
-  font-size: 140%;
-  margin-top: 2em;
-  margin-bottom: 1em;
+.errorField {
+	background: #FFDFDF;
+}
+.warningField {
+	background: #EFEFEF;
+}
+.actionAnchor { text-decoration: none; border-bottom: 1px dashed #0000CF; color: #0000CF; padding-bottom: 1px; cursor: pointer; }
+.actionAnchor:hover { text-decoration: none; border-bottom: 1px dashed #00B000; color: #00B000; }
+
+.removeActionAnchor { border-bottom: 1px dashed #CF0000; color: #CF0000; }
+.removeActionAnchor:hover { border-bottom: 1px dashed #FF0000; color: #FF0000; }
+
+
+.dataObject_name,
+.reference_name,
+.router_name { font-size: 140%; margin-top: 1em; margin-bottom: 2em; }
+
+.dataObject_tableCaptions,
+.reference_tableCaptions { font-size: 70%; }
+
+.dataObject_currentPropertyName,
+.reference_currentPropertyName { padding-right: 10px !important; text-align: right; color: #000000; font-size: 110%; font-weight: bold; }
+.dataObject_id { padding: 8px 20px 8px 4px; color: #000; font-size: 13px; }
+.dataObject_id td { padding: 8px 0px 8px 4px; }
+
+
+
+.adminSection-block { padding: 40px 0 50px 30px; }
+
+.adminSection-searchBlock {
+	padding: 10px;
+	margin: 0px 3px 40px 3px;
+	background: #F0F0F0;
+	width: 780px;
+	font-size: 120%;
 }
 
-.dataObject_tableCaptions, .reference_tableCaptions
-{
-  font-size: 60%;
+.adminSection-searchBlockInput {
+	width: 550px;
+	font-size: 120%;
+	border: 1px solid #B0B0B0;
+	padding: 2px 4px;
 }
 
-.dataObject_currentPropertyName, .reference_currentPropertyName
-{
-  padding: 0 20px 0 0;
-  color: #999;
-  font-size: 12px;
-}
-.dataObject_id
-{
-  padding: 8px 20px 8px 4px;
-  color: #000;
-  font-size: 13px;
+.adminSection-searchBlockInput-noResults {
+	background: #FFDFDF;
 }
 
-.dataObject_id td
-{
-  padding: 8px 0px 8px 4px;
+.adminSection-searchBlockInput-hasResults {
+	background: #DFFFDF;
 }
+
+
+
+.adminSection-searchBlock button
+{
+	border: 1px solid #00B000;
+	color: #009000;
+	background: #EFFFEF;
+	font-size: 120%;
+	margin: 0 0 0 12px;
+	padding: 1px 6px;
+}
+
+.adminSection-searchBlock button[disabled]
+{
+	cursor: default;
+	border-color: #B0B0B0;
+	color: #B0B0B0;
+	background: #DFDFDF;
+}
+
+.adminSection-searchBlock button:not([disabled]):hover {
+	cursor: pointer;
+}
+
+
+
+.adminSection-block select option[data-selected],
+.adminSection-selectHintBlock-squareSelected {
+	background: #BFFFBF;
+}
+.adminSection-block select option[data-current],
+.adminSection-selectHintBlock-squareCurrent {
+	background: #BFBFBF;
+}
+
+.adminSection-selectHintBlock-hintItem {
+	display: inline-block;
+	padding: 0 0 0 10px;
+}
+
+.adminSection-selectHintBlock-square {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border: 1px solid #000000;
+	margin: 0 5px 0 0;
+	position: relative;
+	top: 1px;
+}
+
+.adminSection-inputHintBlock {
+	display: none;
+	margin: -19px 8px 0 0;
+	text-align: right;
+	height: 19px;
+}
+
+.adminSection-inputHintTextBlock {
+	padding: 0px 5px;
+}
+
+.adminSection-inputHintText {
+	position: relative;
+	top: -3px;
+	font-size: 80%;
+	/*border-bottom: 1px solid transparent;*/
+}
+
+.adminSection-parametersHintBlock {
+	color: #FF0000;
+	font-size: 80%;
+	line-height: 1.5;
+}
+
+.adminSection-complexParametersList {
+	padding: 0px 0px 10px 10px;
+	overflow: hidden;
+	width: 640px;
+}
+
+.adminSection-complexPatternParametersHintBlock,
+adminSection-copyComplexPatternParameters {
+	white-space: nowrap;
+}
+
+.adminSection-copyComplexPatternParameters {
+	margin: 0 0 0 20px;
+	color: #CF0000;
+	border-bottom-color: #CF0000;
+	font-weight: bold;
+}
+
+
+
+.adminSection-parametersHintContainer {
+	text-align: left;
+	padding-left: 10px !important;
+}
+
+.adminSection-hintContainer {
+	text-align: right;
+	padding-right: 11px !important;
+}
+
+
+
+.adminSection-routerParametersTable-selectHintBlock {
+	display: none;
+	padding: 0 0 0 10px;
+}
+
+
+
+.adminSection-startPageMenuBlock { line-height: 1.5; }
+.adminSection-topMenuBlock { margin: 0 0 40px 0; }
+
+.adminSection-topMenuItem,
+.adminSection-startPageMenuItem { font-size: 140%; }
+
+.adminSection-topMenuItem a,
+.adminSection-startPageMenuItem a { text-decoration: none; color: #0000CF; }
+
+.adminSection-topMenuItem a:hover,
+.adminSection-startPageMenuItem a:hover { text-decoration: underline; color: #CF0000; }
+
+.adminSection-topMenuItem:not(:first-child):before { content: ' / '; }
+
+.adminSection-contentBlock { }
+
+.adminSection-fieldsTable th { text-align: left; padding-bottom: 5px; }
+.adminSection-fieldsTable td { padding: 2px; }
+
+.adminSection-fieldsTable .adminSection-actionsBlock { padding-left: 10px; }
+
+.adminSection-actionsBlock a { text-decoration: none; color: #0000CF; }
+.adminSection-actionsBlock a:hover { text-decoration: underline; color: #CF0000; }
+
+
+
+/*
+ * Router and cache styles
+ */
+.adminSection-parametersList {
+	width: 800px;
+}
+.adminSection-parametersList-ItemGroupBlock,
+.adminSection-parametersList-ItemBlock { padding: 15px 0 0 0; }
+
+.adminSection-parametersList-ItemBlock .saveRouteActionAnchor {
+	display: none;
+}
+
+.adminSection-routesMenuBlock { padding: 0 0 20px 0; }
+.adminSection-routesMenuItem { display: inline-block; padding: 0 30px 0 10px; }
+
+.adminSection-parametersList-formBlock { padding: 30px 0 0 0; }
+
+.adminSection-parametersList-ItemAdminBlock { }
+.adminSection-parametersList-ItemAdminBlock .adminSection-parametersList-spoiler { background-color: #FCF4E4; }
+.adminSection-parametersList-ItemBlockHidden { display: none; }
+.adminSection-parametersList-spoiler { background-repeat: no-repeat; background-color: transparent; }
+.adminSection-parametersList-ItemGroupBlock .adminSection-parametersList-spoiler { padding: 3px; background-position: 2px 10px; }
+.adminSection-parametersList-ItemBlock .adminSection-parametersList-spoiler { padding: 3px; background-position: 2px 2px; }
+.adminSection-parametersList-spoilerClosed { border: 1px solid transparent; }
+.adminSection-parametersList-spoilerOpen { border: 1px solid #E0E0E0; }
+
+.adminSection-parameters-ListItem { }
+.adminSection-parametersList-routePattern { cursor: pointer; font-weight: bold; white-space: nowrap; overflow: hidden; min-height: 20px; }
+.adminSection-parametersList-ItemGroupBlock .adminSection-parametersList-routePattern { padding: 4px 0 4px 8px; font-size: 160%; color: #30DF30; background: #F0FDF0; }
+.adminSection-parametersList-ItemBlock .adminSection-parametersList-routePattern { padding: 4px 0 4px 8px; font-size: 120%; color: #000000; background: #FDFDFD; }
+.adminSection-parametersList-cacheKeyName { cursor: pointer; padding: 0 0 0 24px; font-size: 120%; font-weight: bold; }
+
+.adminSection-parametersList-spoilerContent { display: none; }
+.adminSection-parametersList-ItemBlock .adminSection-parametersList-spoilerContent { padding: 0 5px 0 24px; }
+.adminSection-parametersList-ItemGroupBlock .adminSection-parametersList-spoilerContent { padding: 5px 5px 5px 24px; }
+
+.adminSection-parametersList-removeRoute { display: block; float: right; position: relative; right: 10px; top: 4px; }
+.adminSection-parametersList-removeRoute span:not(:first-child) { margin: 0 0 0 20px; }
+
+.adminSection-routerPropertiesTable,
+.adminSection-routerParametersTable {
+	width: 100%;
+	margin: 10px 0 0 0;
+}
+
+.adminSection-routerPropertiesTable td,
+.adminSection-routerParametersTable td { padding: 0 0 10px 0; }
+
+.adminSection-routerParametersTable-addParameterBlock { margin: 15px 0 0 0; }
+
+.adminSection-routerParametersTable .removeParameter { float: right; position: relative; top: 4px; }
+
+.adminSection-routerPropertiesTable td.parameterNameBlock,
+.adminSection-routerParametersTable td.parameterNameBlock { width: 80px; text-align: right; padding: 0 5px 0 0; }
+
+.adminSection-routerPropertiesTable td.parameterValueBlock { }
+.adminSection-routerPropertiesTable td.parameterValueBlock select[name="routeBaseClassName"] { width: 260px; }
+
+.adminSection-routerPropertiesTable input[type="text"] { width: 98%; }
+.adminSection-routerParametersTable input[type="text"] { width: 260px; }
+
+.adminSection-testPatternBlock { width: 400px; height: 380px; padding: 10px; position: fixed; top: 100px; right: 20px; border: 1px solid #E0E0E0; background-color: #FFFFFF; z-index: 1; }
+.adminSection-testPatternBlockHidden { display: none; }
+
+.adminSection-testPatternBlock-header { font-weight: bold; margin: 0 0 15px 0; }
+.adminSection-testPatternBlock-subject,
+.adminSection-testPatternBlock-pattern { margin: 0 0 10px 0; }
+.adminSection-testPatternBlock input[name="subject"] { width: 393px; }
+.adminSection-testPatternBlock input[name="pattern"] { width: 336px; }
+.adminSection-testPatternBlock textarea { width: 388px; height: 270px; resize: none; font: 12px monospace; background-color: #FFFFFF; border: 1px dashed #E0E0E0; padding: 5px; }
+.adminSection-testPatternBlock-textareaDisabled { background-color: #E0E0E0; }

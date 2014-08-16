@@ -1,22 +1,253 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
-  <head>    
+  <head>
     <script type="text/javascript" src="/scripts/ff/jquery.js"></script>
-    <script type="text/javascript" src="/scripts/ff/router/index.js"></script>
+    <script type="text/javascript" src="/scripts/admin/router.js"></script>
+    <link rel="stylesheet" type="text/css" href="/styles/ff/reset.css" />
     <link rel="stylesheet" type="text/css" href="/styles/ff/global.css" />
-    <title></title> 
+	  {$this->metaData}
+    <title>Страницы</title>
   </head>
-<h1>Страницы</h1>
-<form action="/admin/router/rp/save/" method="post">
-<table id="router">
-<tbody>
-$routeList 
-</tbody>
-</table>
-<div>
-<button type="submit">Сохранить</button>
+  <body class="body">
+
+    <div class="adminSection-block">
+      <div class="adminSection-topMenuBlock">
+        <span class="adminSection-topMenuItem"><a href="/admin/">Главная</a></span>
+        <span class="adminSection-topMenuItem">Страницы</span>
+      </div>
+
+      <div id="jsActionsBlock" class="adminSection-contentBlock">
+				<div id="jsRoutesJSON" class="hidden">{$routesJSON}</div>
+        <div id="jsAbstractClassesJSON" class="hidden">{$abstractClassesJSON}</div>
+        <div id="jsFieldTypesJSON" class="hidden">{$fieldTypesJSON}</div>
+        <div id="jsSettingsJSON" class="hidden">{$settingsJSON}</div>
+
+        <div id="jsSelectOptionsAbstractClasses" class="hidden"></div>
+        <div id="jsSelectOptionsFieldTypes" class="hidden"></div>
+
+        <div class="adminSection-searchBlock" id="jsSearchRoute">
+       		<input id="jsSearchRouteInput" class="adminSection-searchBlockInput" type="text" value="" placeholder="URL" />
+       		<button id="jsSearchButton" class="adminSection-searchButton" type="button">Найти</button>
+       		<button id="jsSearchResetButton" class="adminSection-searchButton" type="button">Сброс</button>
+        </div>
+        
+        <div class="adminSection-routesMenuBlock">
+          <div class="adminSection-routesMenuItem">
+          	<span class="jsAction jsAddNewRouteAction actionAnchor">добавить</span>
+          </div>
+        </div>
+        
+        <div class="adminSection-parametersList" id="jsRouter"></div>
+      </div>
+    </div>
+
+
+
+    <div class="hiddenTemplates">
+
+    	<div id="jsSpoilerItemGroupTemplate">
+<!--
+<div class="jsItemGroupBlock adminSection-parametersList-ItemGroupBlock unselectable" data-group="{\$group}">
+  <div class="jsToggleSpoilerBlock adminSection-parametersList-spoiler adminSection-parametersList-spoilerClosed">
+    <div class="jsToggleSpoilerClickArea adminSection-parametersList-routePattern">{\$pattern}</div>
+    <div class="jsToggleGroupSpoilerContent jsToggleSpoilerContent adminSection-parametersList-spoilerContent">
+    </div>
+  </div>
 </div>
-</form>
+-->
+      </div>
+
+      <div id="jsSpoilerItemTemplate">
+<!--
+<div id="patternIndex_{\$patternIndex}" class="jsItemBlock {\$newItemClass} adminSection-parametersList-ItemBlock unselectable" data-patternIndex="{\$patternIndex}">
+  <div class="jsToggleSpoilerBlock adminSection-parametersList-spoiler adminSection-parametersList-spoilerClosed">
+		<div class="jsToggleSpoilerClickArea adminSection-parametersList-routePattern">{\$pattern}</div>
+    <div class="jsToggleSpoilerContent adminSection-parametersList-spoilerContent">
+    	<div class="adminSection-parametersList-removeRoute">
+    		<span class="jsAction jsSaveRouteAction actionAnchor saveRouteActionAnchor">сохранить</span>
+    		<span class="jsAction jsRemoveAction jsRemoveRouteAction actionAnchor removeActionAnchor">удалить</span>
+    	</div>
+    	<div class="jsFormBlock adminSection-parametersList-formBlock"></div>
+    </div>
+  </div>
+</div>
+-->
+      </div>
+
+			<div id="jsSelectOptionTemplate">
+<!--
+<option value="{\$value}">{\$name}</option>
+-->
+			</div>
+
+			<div id="jsPatternFormTemplate">
+<!--
+<table class="adminSection-fieldsTable adminSection-routerPropertiesTable">
+	<tr>
+		<td class="parameterNameBlock">Паттерн</td>
+		<td class="parameterValueBlock">
+			<input type="text" value="{\$routePattern}" name="route" placeholder="~^/.../$~" data-savedValue="{\$routePattern}" data-helperValue="~^/myPage/$~" />
+			
+			{\$inputHintBlock}
+			
+		</td>
+	</tr>
+	<tr>
+		<td class="parameterNameBlock">Файл</td>
+		<td class="parameterValueBlock">
+			<input type="text" value="{\$routePath}" name="routePath" placeholder="/modules/..." data-savedValue="{\$routePath}" data-helperValue="/modules/view/myPage.php" />
+			
+			{\$inputHintBlock}
+			
+		</td>
+	</tr>
+	<tr>
+		<td class="parameterNameBlock">Класс</td>
+		<td class="parameterValueBlock">
+			<input type="text" value="{\$routeClass}" name="routeClass" placeholder="bm..." data-savedValue="{\$routeClass}" data-helperValue="bmMyPage" />
+			
+			{\$inputHintBlock}
+			
+		</td>
+	</tr>
+	<tr>
+	<td class="parameterNameBlock">Базовый класс</td>
+	<td class="parameterValueBlock">
+		<select name="routeBaseClassName" data-savedValue="{\$routeBaseClass}">
+
+			{\$selectOptionsAbstractClasses}
+
+		</select>
+
+		{\$hintBlock}
+
+	</td>
+	</tr>
+
+	<tr>
+		<td colspan="*">&nbsp;</td>
+	</tr>
+	<tr>
+		<td><b>Параметры</b></td>
+		<td class="jsParametersHintContainer adminSection-parametersHintContainer">
+		
+			{\$parametersHintBlock}
+
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td  class="adminSection-hintContainer">
+		
+			{\$hintBlock}
+
+		</td>
+	</tr>
+	
+	
+	<tr>
+		<td colspan="2">
+			<table class="jsRouterParametersTable adminSection-routerParametersTable">
+
+				{\$routerParameters}
+
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td class="parameterNameBlock">&nbsp;</td>
+		<td colspan="6">
+			<div class="adminSection-routerParametersTable-addParameterBlock">
+				<span class="jsAction jsAddParameterAction actionAnchor">добавить</span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+  	<td colspan="2">
+  		<br />
+  	</td>
+  </tr>
+</table>
+-->
+      </div>
+
+      <div id="jsPatternFormHintBlockTemplate">
+<!--
+<span class="jsSelectHintBlock adminSection-routerParametersTable-selectHintBlock">
+	<div class="adminSection-selectHintBlock-hintItem">
+		<div class="adminSection-selectHintBlock-square adminSection-selectHintBlock-squareCurrent"></div>предыдущее значение
+	</div>
+	<div class="adminSection-selectHintBlock-hintItem">
+		<div class="adminSection-selectHintBlock-square adminSection-selectHintBlock-squareSelected"></div> текущий выбор
+	</div>
+</span>
+-->
+			</div>
+			
+			<div id="jsPatternInputHintBlockTemplate">
+<!--
+<div class="jsInputHintBlock adminSection-inputHintBlock">
+	<span class="adminSection-inputHintTextBlock">
+		<span class="jsInputHintClickArea adminSection-inputHintText actionAnchor">показать ближайший повтор</span>
+	</span>
+</div>
+-->
+			</div>
+
+			<div id="jsPatternParameterTemplate">
+<!--
+<tr>
+	<td class="parameterNameBlock">Имя</td>
+	<td>
+		<input type="text" name="routeParameterName" value="{\$routeParameterName}" data-savedValue="{\$routeParameterName}" />
+	</td>
+	<td>&nbsp;&nbsp;</td>
+	<td>Тип</td>
+	<td>
+		<select name="routeParameterType" data-savedValue="{\$fieldType}">
+
+			{\$selectOptionsFieldTypes}
+
+		</select>
+	</td>
+	<td>&nbsp;&nbsp;</td>
+	<td>
+		<span class="jsAction jsRemoveAction jsRemoveParameterAction actionAnchor removeActionAnchor">удалить</span>
+	</td>
+</tr>
+-->
+			</div>
+			
+			<div id="jsParametersHintBlockTemplate">
+<!--
+<div class="jsParametersHintBlock adminSection-parametersHintBlock">
+	<div>Есть различия в списках параметров для:</div>
+	<div class="adminSection-complexParametersList">
+	
+		{\$patternsList}
+	
+	</div>
+	<div><b>При сохранении этого паттерна все параметры в других будут заменены!</b></div>
+</div>
+-->
+			</div>
+			
+			<div id="jsComplexPatternParametersHintBlockTemplate">
+<!--
+<div>
+	<span class="jsComplexPatternParametersClickArea adminSection-complexPatternParametersHintBlock actionAnchor" data-patternIndex="{\$patternIndex}">
+		{\$pattern}
+	</span>
+
+	<span class="jsCloneComplexPatternParametersClickArea adminSection-copyComplexPatternParameters actionAnchor" data-patternIndex="{\$patternIndex}">
+		Использовать эти параметры
+	</span>
+</div>
+-->
+			</div>
+
+    </div>
+
   </body>
 </html>

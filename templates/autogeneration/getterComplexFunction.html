@@ -1,26 +1,10 @@
-    public function get{$ucPropertyName}s(\$load = true)
-    {
-      \$cacheKey = '{$objectName}_{$propertyName}s_' . \$this->properties['identifier'];
-      
-      \$sql = "
-        SELECT 
-{$selectFields}
-        FROM 
-          `{$tableName}`
-        WHERE 
-          `{$tableName}`.`{$thisObjectFieldName}` = " . \$this->properties['identifier'] . ";
-      ";
-      
-      {$map}
-      
-      if (!\$load)
-      {
-        \$this->properties['old{$ucPropertyName}Ids'] = \$this->getComplexLinks(\$sql, \$cacheKey, \$map, E_OBJECTS_NOT_FOUND, \$load);
-        
-        return \$this->properties['old{$ucPropertyName}Ids'];
-      }
-      else
-      {
-        return \$this->getComplexLinks(\$sql, \$cacheKey, \$map, E_OBJECTS_NOT_FOUND, \$load);
-      }
+public function get{$ucPropertyName}s(\$load = true)
+	{
+		\$link = "{$link}";
+		\$param = [
+			'object' => '{$object}',
+			'fields' => [{$fields}],
+			'objects' => [{$objects}],
+		];
+		return parent::getMethodObjects(\$link, \$param, \$load);
     }

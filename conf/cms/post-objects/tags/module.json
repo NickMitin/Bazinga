@@ -1,0 +1,14 @@
+{
+	"dataObject": "tag",
+	"titles": {
+	},
+	"list": {
+		"columns": ["name", "url"]
+	},
+	"form": {
+		"fields": {
+			"name": true,
+			"url": true
+		}
+	}
+}
