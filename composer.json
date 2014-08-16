@@ -1,6 +1,18 @@
 {
-	"name": "detisoft/deticms-basic",
 	"minimum-stability": "dev",
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "detisoft/deticms-basic",
+				"version": "1.0.1",
+				"source": {
+					"type": "vcs",
+					"url": "https://github.com/NickMitin/Bazinga/tree/af_cloneObject"
+				}
+			}
+		}
+	],
     "require": {
 		"php": ">=5.4.0",
         "twig/twig": "1.*",
