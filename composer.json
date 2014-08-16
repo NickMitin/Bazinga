@@ -5,7 +5,7 @@
 	"repositories": [
 		{
 			"type": "vcs",
-			"url": "https://github.com/NickMitin/Bazinga/tree/af_cloneObject"
+			"url": "https://github.com/NickMitin/Bazinga"
 		}
 	],
     "require": {
