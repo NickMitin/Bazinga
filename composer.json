@@ -1,12 +1,6 @@
 {
 	"name": "detisoft/deticms-basic",
 	"minimum-stability": "dev",
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/NickMitin/Bazinga/blob/af_cloneObject"
-		}
-	],
     "require": {
 		"php": ">=5.4.0",
         "twig/twig": "1.*",
