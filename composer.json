@@ -1,23 +1,18 @@
 {
-	"name": "yiisoft/yii2-app-benchmark",
-	"description": "Yii 2 Benchmark Application",
-	"keywords": ["yii2", "framework", "benchmark", "application"],
-	"homepage": "http://www.yiiframework.com/",
+	"name": "detisoft/deticms-basic",
 	"type": "project",
-	"license": "BSD-3-Clause",
-	"support": {
-		"issues": "https://github.com/yiisoft/yii2/issues?state=open",
-		"forum": "http://www.yiiframework.com/forum/",
-		"wiki": "http://www.yiiframework.com/wiki/",
-		"irc": "irc://irc.freenode.net/yii",
-		"source": "https://github.com/yiisoft/yii2"
-	},
-	"config": {
-		"vendor-dir": "protected/vendor"
-	},
+	"version":"1.0.0",
 	"minimum-stability": "dev",
-	"require": {
+	"repositories": [
+		{
+			"type": "git",
+			"url": "http://github.com/NickMitin/Bazinga",
+			"reference": "af_cloneObject"
+		}
+	],
+    "require": {
 		"php": ">=5.4.0",
-		"yiisoft/yii2": "*"
-	}
+        "twig/twig": "1.*",
+		"sybio/image-workshop": "dev-master"
+    }
 }
