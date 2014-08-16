@@ -1,11 +1,12 @@
 {
 	"name": "detisoft/deticms-basic",
-	"minimum-stability": "dev",
 	"type": "project",
+	"version":"1.0.0",
+	"minimum-stability": "dev",
 	"repositories": [
 		{
-			"type": "vcs",
-			"url": "https://github.com/NickMitin/Bazinga",
+			"type": "git",
+			"url": "http://github.com/NickMitin/Bazinga",
 			"reference": "af_cloneObject"
 		}
 	],
