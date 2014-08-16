@@ -9,7 +9,7 @@
 				"version": "1.0.1",
 				"source": {
 					"type": "vcs",
-					"url": "https://github.com/NickMitin/Bazinga",
+					"url": "http://github.com/NickMitin/Bazinga.git",
 					"branches-path": "af_cloneObject"
 				}
 			}
