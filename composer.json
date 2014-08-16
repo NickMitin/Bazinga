@@ -3,9 +3,16 @@
 	"minimum-stability": "dev",
 	"repositories": [
 		{
-			"url": "https://github.com/NickMitin/Bazinga",
-			"type": "vcs",
-			"branches-path": "af_cloneObject"
+			"type": "package",
+			"package": {
+				"name": "detisoft/deticms-basic",
+				"version": "1.0.1",
+				"source": {
+					"type": "vcs",
+					"url": "https://github.com/NickMitin/Bazinga",
+					"branches-path": "af_cloneObject"
+				}
+			}
 		}
 	],
     "require": {
