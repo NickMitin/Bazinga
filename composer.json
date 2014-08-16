@@ -1,6 +1,13 @@
 {
 	"name": "detisoft/deticms-basic",
 	"minimum-stability": "dev",
+	"repositories": [
+		{
+			"url": "https://github.com/NickMitin/Bazinga",
+			"type": "vcs",
+			"branches-path": "af_cloneObject"
+		}
+	],
     "require": {
 		"php": ">=5.4.0",
         "twig/twig": "1.*",
