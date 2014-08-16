@@ -3,9 +3,8 @@
 	"minimum-stability": "dev",
 	"repositories": [
 		{
-			"type": "git",
-			"url": "https://github.com/NickMitin/Bazinga.git",
-			"branches-path": "af_cloneObject"
+			"type": "vcs",
+			"url": "https://github.com/NickMitin/Bazinga/blob/af_cloneObject"
 		}
 	],
     "require": {
