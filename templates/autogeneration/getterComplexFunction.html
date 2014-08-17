@@ -1,10 +1,22 @@
-public function get{$ucPropertyName}s(\$load = true)
+/**
+	 * @param bool \$load
+	 * @param bool \$param
+	 *  \$param['where'] Условия отбора
+	 *  \$param['order'] Условия сортировки
+	 *  \$param['group'] Условия гуперовки
+	 *  \$param['having'] Условия гуперовки
+	 *  \$param['offset']
+	 *  \$param['limit']
+	 *
+	 * @return array|bool
+	 */
+	public function get{$ucPropertyName}s(\$load = true, \$param = null)
 	{
-		\$link = "{$link}";
-		\$param = [
+		\$paramObject = [
 			'object' => '{$object}',
 			'fields' => [{$fields}],
 			'objects' => [{$objects}],
+			'param' => \$param,
 		];
-		return parent::getMethodObjects(\$link, \$param, \$load);
+		return parent::getMethodObjects("{$link}", \$paramObject, \$load);
     }

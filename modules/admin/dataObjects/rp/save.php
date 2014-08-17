@@ -32,7 +32,7 @@ class bmSaveDataObjects extends bmCustomRemoteProcedure
 				$pattern = '/^[a-zA-Z][a-zA-Z0-9]+$/';
 				if (preg_match($pattern, $dataObjectName))
 				{
-					$migration = new bmMigration($this->application->dataLinkWrite);
+					$migration = new bmMigration($this->application->dataLink);
 					$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $dataObjectMapId), $migration);
 					$dataObjectMap->beginUpdate();
 

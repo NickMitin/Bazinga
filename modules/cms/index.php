@@ -8,6 +8,7 @@ final class bmCMSIndexPage extends bmCMSPage
 	 */
 	function generateGET()
 	{
+		
 		return $this->renderTemplate('index.twig', $this->templateVars);
 	}
 }

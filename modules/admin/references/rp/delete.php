@@ -19,7 +19,7 @@ class bmDeleteReference extends bmCustomRemoteProcedure
 
 		if ($this->referenceMapId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLinkWrite);
+			$migration = new bmMigration($this->application->dataLink);
 			$referenceMap = new bmReferenceMap($this->application, array('identifier' => $this->referenceMapId), $migration);
 
 			$referenceMap->delete();

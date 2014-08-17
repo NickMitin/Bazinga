@@ -33,7 +33,7 @@ class bmSaveReferences extends bmCustomRemoteProcedure
 				$pattern = '/^[a-zA-Z][a-zA-Z0-9_]+$/';
 				if (preg_match($pattern, $referenceName))
 				{
-					$migration = new bmMigration($this->application->dataLinkWrite);
+					$migration = new bmMigration($this->application->dataLink);
 					$referenceMap = new bmReferenceMap($this->application, array('identifier' => $referenceMapId), $migration);
 					$referenceMap->beginUpdate();
 

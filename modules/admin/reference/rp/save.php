@@ -177,13 +177,13 @@ class bmSaveReference extends bmCustomRemoteProcedure
 
 	public function execute()
 	{
-		$dataLink = $this->application->dataLinkWrite;
+		$dataLink = $this->application->dataLink;
 		$itemsMapObject = [];
 		$oldReferenceField = [];
 
 		if ($this->referenceId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLinkWrite);
+			$migration = new bmMigration($this->application->dataLink);
 			$referenceMap = new bmReferenceMap($this->application, array('identifier' => $this->referenceId), $migration);
 
 			foreach ($this->dataFields as &$item)

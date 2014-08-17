@@ -1,6 +1,6 @@
 <?php
 
-final class bmAdminIndexPage extends bmAdminPage
+final class bmAdminIndexPage extends bmHTMLPage
 {
 	/*FF::AC::CGIPROPERTIES::{*/
 
@@ -14,6 +14,7 @@ final class bmAdminIndexPage extends bmAdminPage
 
 		$this->addScript('ff/jquery');
 		$this->addScript('admin/index/index');
+		$this->addCSS('admin/global');
 		$this->addCSS('admin/index/index');
 	}
 

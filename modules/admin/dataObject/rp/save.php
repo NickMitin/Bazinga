@@ -156,13 +156,56 @@ class bmSaveDataObject extends bmCustomRemoteProcedure
 		$oldDataObjectField = [];
 		if ($this->dataObjectId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLinkWrite);
+			$migration = new bmMigration($this->application->dataLink);
 			$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $this->dataObjectId), $migration);
 
 			foreach ($this->dataFields as &$item)
 			{
 				if ($item->action != 'delete')
 				{
+
+					$inflectionNames = array(
+						'nominative',
+						'genitive',
+						'dative',
+						'accusive',
+						'creative',
+						'prepositional'
+					);
+
+					if ($item->localName != '')
+					{
+						$inflections = file_get_contents('http://export.yandex.ru/inflect.xml?name=' . urlencode($item->localName));
+						$xml = simplexml_load_string($inflections);
+						$inflections = array();
+						if (count($xml->inflection) == 6)
+						{
+							$i = 0;
+							foreach ($xml->inflection as $inflection)
+							{
+								$inflections[$inflectionNames[$i]] = (string)$inflection;
+								$i++;
+							}
+						}
+						else
+						{
+							foreach ($inflectionNames as $i => $inflection)
+							{
+								$inflections[$inflectionNames[$i]] = (string)$xml->inflection;
+							}
+						}
+					}
+					else
+					{
+						$inflections = array();
+						foreach ($inflectionNames as $i => $inflection)
+						{
+							$inflections[$inflectionNames[$i]] = $item->propertyName;
+						}
+					}
+					$item->localName = serialize($inflections);
+
+
 					if ($item->dataType == BM_VT_DATETIME)
 					{
 						if (!preg_match('/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}$/', $item->defaultValue))

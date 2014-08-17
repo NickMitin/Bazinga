@@ -19,7 +19,7 @@ class bmDeleteDataObject extends bmCustomRemoteProcedure
 
 		if ($this->dataObjectMapId != 0)
 		{
-			$migration = new bmMigration($this->application->dataLinkWrite);
+			$migration = new bmMigration($this->application->dataLink);
 			$dataObjectMap = new bmDataObjectMap($this->application, array('identifier' => $this->dataObjectMapId), $migration);
 
 			$dataObjectMap->delete();

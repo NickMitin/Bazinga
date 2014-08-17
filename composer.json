@@ -10,9 +10,9 @@
 			"reference": "af_cloneObject"
 		}
 	],
-    "require": {
+	"require": {
 		"php": ">=5.4.0",
-        "twig/twig": "1.*",
+		"twig/twig": "1.*",
 		"sybio/image-workshop": "dev-master"
-    }
+	}
 }
