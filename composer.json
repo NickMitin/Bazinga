@@ -13,6 +13,6 @@
 		"php": ">=5.4.0",
 		"twig/twig": "1.*",
 		"sybio/image-workshop": "dev-master",
-		"name": "tbms/bazinga-cms"
+		"tbms/bazinga-lib": "dev-master"
 	}
 }
