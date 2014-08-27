@@ -6,8 +6,7 @@
 	"repositories": [
 		{
 			"type": "git",
-			"url": "http://github.com/NickMitin/Bazinga",
-			"reference": "af_cloneObject"
+			"url": "http://github.com/NickMitin/Bazinga"
 		}
 	],
 	"require": {
