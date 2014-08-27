@@ -2,7 +2,7 @@
 	"name": "tbms/bazinga-cms",
 	"type": "project",
 	"version":"1.0.0",
-	"minimum-stability": "stable",
+	"minimum-stability": "dev",
 	"repositories": [
 		{
 			"type": "git",
