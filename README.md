@@ -1,7 +1,7 @@
 Bazinga
 =======
 
-### Installer
+## Installer
 
 Установить в папку `/var/project-name`
 
@@ -11,4 +11,18 @@ Bazinga
 
 `composer create-project tbms/bazinga-cms ./ -s dev`
 
-**Папка не должна существовать или папка должна быть пустой**
+*Папка не должна существовать или папка должна быть пустой*
+
+## Настройка
+
+### Apache
+
+в корне создаем `.htaccess`
+
+```
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule  ^$ www/    [L]
+    RewriteRule  (.*) www/$1 [L]
+</IfModule>
+```
