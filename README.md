@@ -22,7 +22,7 @@ Bazinga
 ```
 <IfModule mod_rewrite.c>
     RewriteEngine on
-    RewriteRule  ^$ www/    [L]
-    RewriteRule  (.*) www/$1 [L]
+    RewriteRule  ^$ www/generator.php    [L]
+    RewriteRule  (.*) www/generator.php$1 [L]
 </IfModule>
 ```
