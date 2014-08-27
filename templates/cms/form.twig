@@ -35,7 +35,7 @@
 								<div class="caption">{{ fieldParams.title }}</div>
 							</td>
 							<td class="field">
-								{% include 'fields/form.twig' with {'field': field, 'fieldParams': fieldParams}  %}
+								{% include 'fields/form.twig' with {'field': field, 'fieldParams': fieldParams, 'prefix': ''}  %}
 							</td>
 						</tr>
 					{% endfor %}

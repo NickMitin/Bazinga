@@ -1,18 +1,18 @@
 {% if fieldParams.type == 'password' %}
-	<input type="password" class="text password" name="cms-form-item[{{ field }}]"/>
+	<input type="password" class="text password" name="cms-form-item{{ prefix }}[{{ field }}]"/>
 {% elseif fieldParams.type == 'checkbox' %}
 	<label>
-		<input type="checkbox" name="cms-form-item[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
+		<input type="checkbox" name="cms-form-item{{ prefix }}[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
 	</label>
 {% elseif fieldParams.type == 'datetime' %}
 	{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
-	<input type="datetime-local" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
+	<input type="datetime-local" class="text" name="cms-form-item{{ prefix }}[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
 {% elseif fieldParams.type == 'redactor' %}
 	<div class="wsRedactor">
 		<textarea id="redactor-{{ field }}-{{ objectData.getProperty('identifier') }}" name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
 	</div>
 {% elseif fieldParams.type == 'text' %}
-	<textarea name="cms-form-item[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
+	<textarea name="cms-form-item{{ prefix }}[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
 {% elseif fieldParams.type == 'custom' %}
 	{% autoescape false %}
 	{{ fieldParams.html }}
@@ -31,7 +31,7 @@
 				<tr>
 					{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
 						<td class="field">
-							{% include 'fields/form.twig' with {'field': fieldChildren, 'fieldParams': fieldParamsChildren, 'objectData': object}  %}
+							{% include 'fields/form.twig' with {'field': fieldChildren, 'fieldParams': fieldParamsChildren, 'objectData': object, 'prefix': '[]'}  %}
 						</td>
 					{% endfor %}
 				</tr>
@@ -40,7 +40,7 @@
 	</div>
 {% elseif fieldParams.type == 'relation' %}
 	{% if fieldParams.cardinality == 'one' %}
-		<select class="text" name="cms-form-item-relation[{{ field }}]">
+		<select class="text" name="cms-form-item-relation{{ prefix }}[{{ field }}]">
 			<option></option>
 			{% for id,name in fieldParams.items %}
 				<option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
@@ -53,7 +53,7 @@
 			{% for id,name in fieldParams.items %}
 				<li>
 					<label>
-						<input type="checkbox" name="cms-form-item-relation[{{ field }}][{{ id }}]" value="1" {% if id in fieldParams.bindedItems %}checked{% endif %} />
+						<input type="checkbox" name="cms-form-item-relation{{ prefix }}[{{ field }}][{{ id }}]" value="1" {% if id in fieldParams.bindedItems %}checked{% endif %} />
 						{{ name }}
 					</label>
 				</li>
@@ -65,5 +65,5 @@
 {% elseif fieldParams.type == 'files' %}
 	{% include 'fields/files.twig' %}
 {% else %}
-	<input type="text" class="text" name="cms-form-item[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
+	<input type="text" class="text" name="cms-form-item{{ prefix }}[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
 {% endif %}

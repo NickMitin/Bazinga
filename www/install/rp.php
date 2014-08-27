@@ -16,7 +16,7 @@
   $dbFile = fopen($serverRoot . '/conf/db_default.conf', 'w');
   fwrite($dbFile, $dbConfig);
   
-  $conf = file_get_contents($serverRoot . '/conf/application.conf');
+  $conf = file_get_contents($serverRoot . '/conf/local.conf');
   
   $conf = preg_replace(
     '/define\(\'C_SESSION_COOKIE_DOMAIN\', \'.*?\'\);/ism', 

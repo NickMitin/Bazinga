@@ -11,3 +11,5 @@ conf/cache_default.conf
 composer.lock
 conf/passwd.conf
 conf/local.conf
+vendor
+composer.lock

@@ -39,7 +39,7 @@ $(document).on('click', 'input[name="clone-map"]', function () {
 	}).done(function (data) {
 		var url = document.location.href.replace(/\/?$/, '').replace(/\d+$/, data.id) + '/';
 		document.location.href = url;
-	});
+});
 	return false;
 });
 

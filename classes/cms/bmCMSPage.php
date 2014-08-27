@@ -30,7 +30,6 @@ abstract class bmCMSPage extends bmHTMLPage
 
 		$this->initTwig();
 		$this->loadCmsConfig();
-
 		if (@$this->cmsConfig['structure'][$this->application->generator->pathSections[1]]['sections'] && count($this->application->generator->pathSections) == 2)
 		{
 			header('location: ./' . (array_keys($this->cmsConfig['structure'][$this->application->generator->pathSections[1]]['sections'])[0]) . "/", true);
