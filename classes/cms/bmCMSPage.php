@@ -520,9 +520,6 @@ abstract class bmCMSPage extends bmHTMLPage
 				$value = @$_POST['cms-form-item'][$field];
 				switch ($fieldInfo['type'])
 				{
-					case 'password':
-						continue;
-						break;
 					case 'checkbox':
 						$object->{$field} = !!intval($value);
 						break;
