@@ -1,23 +1,47 @@
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
 body {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
 	line-height: 1.5em;
+	font-weight: 300;
 	color: #333;
-	background: #f0f0f0;
+	background: url("../../images/cms/bg1.jpg") fixed;
+	background-size: cover;
+}
+
+input, select, textarea {
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	line-height: 1.5em;
+	font-weight: 300;
+	color: #333;
+}
+
+body > .bg {
+	min-height: 100%;
+	padding: 15px 0;
+	background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.7)), color-stop(100%, rgba(0, 0, 0, 0.8))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa000000', endColorstr='#cc000000', GradientType=0); /* IE6-9*/
 }
 
 a {
-	color: #4b5f6a;
+	color: #6a5f4b;
 }
 
 a:hover {
 	text-decoration: underline;
-	opacity: 0.8;
 	outline: none;
-	-webkit-transition: all 0.1s linear;
-	-moz-transition: all 0.1s linear;
-	-transition: all 0.1s linear;
-
+	opacity: 0.7;
+	transition: .2s;
 }
 
 strong {
@@ -25,73 +49,113 @@ strong {
 }
 
 .cms-page header {
-	/*background: white url("../../i/cms/bazinga.png") 10px center no-repeat;*/
-	background: white;
-	/*background-size: contain;*/
-	/*padding-left:100px;*/
-	box-shadow: 0 1px 1px #ccc;
-	/*position: fixed;*/
-	width: 100%;
-	/*top: 0;*/
+	display: block;
+	margin: 0 30px;
+	position: relative;
+	z-index: 10;
+}
+
+.cms-page header:after {
+	background: url("../../images/cms/brain.png");
+	width: 70px;
+	height: 76px;
+	position: absolute;
+	background-size: cover;
+	content: '';
+	top: 18px;
+	right: -16px;
+}
+
+.cms-page header.has-sub-menu:after {
+	top: 5px;
 }
 
 .cms-page header li {
 	display: block;
 	float: left;
-	height: 40px;
-}
-
-.cms-page header li:first-child {
-	padding-left: 30px;
 }
 
 .cms-page header li a {
 	text-decoration: none;
 	display: block;
 	padding: 10px 20px;
+	color: white;
 }
 
 .cms-page header li a i {
+	color: dimgrey;
 	margin-right: 8px;
+	font-size: 20px;
 }
 
 .cms-page header li.active {
-	background-color: #777;
+	background: linear-gradient(to bottom, rgba(245, 245, 220, 0.9) 0%, rgba(245, 245, 220, 0.8) 100%); /* W3C */
 }
+
 .cms-page header li.active a {
-	color:white;
+	color: dimgrey;
 }
 
+.cms-page header li.active a i {
+	color: dimgrey;
+}
 
-.cms-page header .sub-menu  {
-	background-color: #777;
-	height: 42px;
+.cms-page header .sub-menu {
+	background: linear-gradient(to bottom, rgba(245, 245, 220, 0.8) 0%, rgba(245, 245, 220, 0.7) 100%); /* W3C */
+	padding-left: 100px;
+}
+
+.cms-page header .sub-menu li.active {
+	background: none;
+}
+
+.cms-page header .sub-menu li {
+	padding-top: 8px;
 }
 
 .cms-page header .sub-menu li a {
-	color:white;
-	padding: 10px 30px;
+	padding: 8px 20px;
+	color: dimgrey;
+}
+
+.cms-page header .sub-menu li a i {
+	color: dimgrey;
+	font-size: 14px;
 }
 
 .cms-page header .sub-menu li.active a {
-	margin: 6px 0;
-	padding: 4px 30px;
-	background-color: #666;
+	color: dimgrey;
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%);
+	background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.15))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.15) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#44000000', GradientType=0); /* IE6-9*/
+	box-shadow: 0 5px 2px rgba(0, 0, 0, 0.4);
 }
 
-
-
-
+.cms-page header .sub-menu li.active a i {
+	color: brown;
+}
 
 .cms-page .module-content {
-	margin: 20px 30px;
-	background: white;
-	padding: 20px;
-	border:1px solid #ccc;
+	margin: 15px 30px;
+	background: #f9f9fe;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	padding: 30px;
+	min-height: 80vh;
+	position: relative;
 }
 
 .cms-page .module-content .cms-module-list {
 
+}
+
+.cms-page .module-content .cms-module-list .add-new-item {
+	margin-bottom: 20px;
+	padding: 5px 15px;
 }
 
 .cms-page .module-content .cms-module-list table th {
@@ -100,15 +164,64 @@ strong {
 	font-weight: 600;
 	text-transform: uppercase;
 	padding: 4px 10px;
-	color:#999;
-}
-.cms-page .module-content .cms-module-list table td {
-	padding:4px 10px;
-}
-.cms-page .module-content .cms-module-list table tr:nth-child(even) td {
-	background: #f5f5f5;
+	color: #999;
 }
 
+.cms-page .module-content .cms-module-list table td {
+	padding: 4px 10px;
+}
+
+.cms-page .module-content .cms-module-list table tr:nth-child(even) td {
+	background: #f5f5f0;
+}
+
+.cms-page .module-content .cms-module-list table td a:hover {
+	text-decoration: underline;
+	opacity: 0.8;
+	outline: none;
+	-webkit-transition: all 0.1s linear;
+	-moz-transition: all 0.1s linear;
+	-transition: all 0.1s linear;
+}
+
+.cms-page .module-content .cms-module-list table td button {
+	padding: 3px 7px;
+	width: 26px;
+	border: none;
+	color: white;
+	cursor: pointer;
+	outline: none;
+}
+
+.cms-page .module-content .cms-module-list table td button:hover {
+	opacity: 0.8;
+}
+
+.cms-page .module-content .cms-module-list table td button.delete {
+	background-color: #c33;
+}
+
+.cms-page .module-content .cms-module-list table td button.status {
+	background-color: #ec3;
+}
+
+.cms-page .module-content .cms-module-list table td .button.edit {
+	display: inline-block;
+	text-decoration: none;
+	padding: 3px 7px;
+	width: 26px;
+	border: none;
+	color: white;
+	background-color: darkslategrey;
+}
+
+.cms-page .module-content .cms-module-list table .inactive td button.status {
+	background-color: #ccc;
+}
+
+.cms-page .module-content .cms-module-list table .inactive td, .cms-page .module-content .cms-module-list table .inactive td a {
+	color: #aaa;
+}
 
 .cms-page .module-content .cms-module-form {
 	margin-left: -20px;
@@ -118,11 +231,12 @@ strong {
 	vertical-align: top;
 }
 
-.cms-page .module-content .cms-module-form TD.caption  {
+.cms-page .module-content .cms-module-form TD.caption {
 	padding-right: 7px;
 	min-width: 120px
 }
-.cms-page .module-content .cms-module-form TD.field.red p ,.cms-page .module-content .cms-module-form TD.caption.red .caption {
+
+.cms-page .module-content .cms-module-form TD.field.red p, .cms-page .module-content .cms-module-form TD.caption.red .caption {
 	color: #ff4242;
 }
 
@@ -134,34 +248,32 @@ strong {
 }
 
 .cms-page .module-content .cms-module-form TD.caption .caption {
-	font-size: 10px;
-	color: white;
-	background-color: #c4c5c9;
-	padding: 2px 10px;
+	font-size: 14px;
+	color: #778;
+	padding: 2px 20px;
 	margin-top: 2px;
 }
 
 .cms-page .module-content .cms-module-form TD.field INPUT.text {
-	padding: 4px;
+	padding: 5px;
 	width: 350px;
+	border: 1px solid #dddde5;
 }
 
 .cms-page .module-content .cms-module-form TD.field TEXTAREA {
+	padding: 5px;
 	margin-top: 2px;
 	width: 700px;
 	height: 200px;
+	border: 1px solid #dddde5;
 }
 
 .cms-page .module-content .cms-module-form .form-buttons {
-	background: #f0f0f0;
-	padding: 5px 10px;
-	margin: 10px 0 0 -5px;
 }
 
 .cms-page .module-content .cms-module-form .form-buttons input {
 	padding: 5px 10px;
 }
-
 
 /* todo: перенести потом в соответствующую CSS-ку */
 .cms-page .module-content .cms-module-form TD.field .courses-list-container {
@@ -177,10 +289,11 @@ strong {
 
 .cms-page .module-content .cms-module-form TD.field .courses-list TD {
 	padding-right: 10px;
+	padding-bottom: 5px;
 }
 
 .cms-page .module-content .cms-module-form TD.field .courses-list INPUT.text {
-	width: 80px;
+	width: 120px;
 }
 
 .cms-page .module-content .cms-module-form TD.field .courses-list TEXTAREA {
@@ -189,16 +302,17 @@ strong {
 }
 
 .cms-page .list-image .list-image-item {
-	padding: 0 20px 20px 0;
+	padding: 10px;
 	display: inline-block;
 	position: relative;
-	width: 220px;
+	/*width: 220px;*/
+	border: 1px solid #f0f0f0;
+	margin: 0 20px 20px 0;
 }
 
-.cms-page .list-image .list-image-item .list-image-item-canvast
-{
-	width: 200px;
-	height: 200px;
+.cms-page .list-image .list-image-item .list-image-item-canvast {
+	width: 80px;
+	height: 80px;
 	position: relative;
 }
 
@@ -208,13 +322,13 @@ strong {
 	top: 0;
 	left: 0;
 	width: 0;
-	height: 200px;
+	height: 80px;
 	background-color: #42cc42;
 	opacity: 0.5;
 }
 
-.cms-page .list-image .list-image-item input {
-	width: 200px !important;
+.cms-page .list-image .list-image-item input[type=text] {
+	width: 100px !important;
 }
 
 .cms-page .list-image .list-image-item:hover .list-image-item-remove {
@@ -236,10 +350,251 @@ strong {
 .cms-page .list-image .list-image-item .list-image-item-remove-text {
 	display: none;
 }
+
 .cms-page .list-image .list-image-item a {
 	display: block;
 	margin-bottom: 5px;
 }
 
+.cms-page .two-column-layout {
+	display: flex;
+	display: -webkit-flex;
+	align-items: stretch;
+	-webkit-align-items: stretch;
+	margin: 15px 30px;
+	min-height: 80vh;
+}
 
+.cms-page .two-column-layout .nav-panel {
+	width: 20%;
+	background: #f9f9fe;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+	position: absolute;
+	overflow: auto;
+	max-height: 80vh;
+}
 
+.cms-page .two-column-layout .nav-panel .filter {
+	padding: 30px 20px 10px 20px;
+}
+
+.cms-page .two-column-layout .nav-panel .filter input {
+	padding: 2px 5px;
+	width: 90%;
+}
+
+.cms-page .two-column-layout .nav-panel.has-filter li {
+	display: none;
+}
+
+.cms-page .two-column-layout .nav-panel.has-filter li li {
+	display: block;
+}
+
+.cms-page .two-column-layout .nav-panel.has-filter li.filtered {
+	display: block;
+}
+
+.cms-page .two-column-layout .nav-panel ul li {
+	padding: 20px 20px 0 20px;
+}
+
+/*.cms-page .two-column-layout .nav-panel ul li.active {
+	background: #e6e6d9;
+	padding-bottom: 10px;
+	margin-bottom: -10px;
+}*/
+
+.cms-page .two-column-layout .nav-panel ul li.active > a {
+	font-weight: 400;
+	color: #000;
+}
+
+.cms-page .two-column-layout .nav-panel ul li a {
+	line-height: 1.1em;
+	text-decoration: none;
+}
+
+.cms-page .two-column-layout .nav-panel ul li a.fa {
+	color: #698aa2;
+	opacity: 0.5;
+	float: right;
+}
+
+.cms-page .two-column-layout .nav-panel ul li a.fa:hover {
+	opacity: 0.8;
+}
+
+.cms-page .two-column-layout .nav-panel ul li a span {
+	background: #ee0;
+	padding: 0 1px
+}
+
+.cms-page .two-column-layout .nav-panel ul li.active a span {
+	font-weight: 400;
+}
+
+/* submenu */
+.cms-page .two-column-layout .nav-panel ul ul {
+	margin: 3px 0 10px 10px;
+}
+
+.cms-page .two-column-layout .nav-panel ul ul li {
+	padding: 4px 0 4px 4px;
+}
+
+.cms-page .two-column-layout .nav-panel ul ul li.active {
+	padding: 4px 0 4px 4px;
+	margin-bottom: 0px;
+}
+
+.cms-page .two-column-layout .main-panel {
+	width: 80%;
+	padding-left: 20px;
+	margin-left: 20%;
+}
+
+.cms-page .two-column-layout .main-panel .module-content {
+	margin: 0;
+}
+
+.cms-page .two-column-layout .main-panel h1 {
+	font-size: 24px;
+	margin-bottom: 30px;
+	font-weight: 300;
+	line-height: 38px;
+}
+
+.cms-page .two-column-layout .main-panel h1 a {
+	text-decoration: none;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #c4c0bc
+}
+
+.cms-page .module-content .two-column-layout .main-panel .cms-module-form {
+	margin-left: 0;
+}
+
+ul.acl ul {
+	margin-left: 20px;
+}
+
+body.login-page .bg {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+body.login-page .login-form {
+	opacity: 0.85;
+	width: 500px;
+	height: 400px;
+	background: #f9f9fe;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+	position: relative;
+}
+
+body.login-page .login-form:after {
+	background: url("../../images/cms/brain.png");
+	width: 139px;
+	height: 152px;
+	position: absolute;
+	content: '';
+	top: -75px;
+	right: -32px;
+}
+
+body.login-page .login-form form {
+	padding: 90px 60px 70px 60px;
+	text-align: center;
+}
+
+body.login-page .login-form form .error {
+	background-color: firebrick;
+	padding: 10px;
+	left: -30px;
+	top: 20px;
+	color: white;
+	position: absolute;
+}
+
+body.login-page .login-form form input.text {
+	width: 100%;
+	font-size: 24px;
+	padding: 10px;
+	border: none;
+	border-bottom: 1px solid #dde;
+	margin-bottom: 30px;
+	background: none;
+	outline: none;
+}
+
+body.login-page .login-form form input.text:focus {
+	border-bottom: 1px solid #b7d65c;
+}
+
+body.login-page .login-form form input[type=submit] {
+	background: #b7d65c;
+	padding: 10px 45px;
+	border: none;
+	font-size: 24px;
+	margin-top: 20px;
+	color: #4c5b1f;
+}
+
+body.login-page .login-form form input[type=submit]:hover {
+	background: #c7e66c;
+	color: #6c7b3f;
+}
+
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.cms-page .two-column-layout .main-panel .module-content:before {
+	position: fixed;
+	right: 50px;
+	top: 100px;
+	border-radius:100px;
+	width:60px;
+	height:60px;
+	color:white;
+	justify-content: center;
+	align-items: center;
+	font-size: 12px;
+	opacity: 0.5;
+	display: none;
+	text-align: center;
+}
+.cms-page .two-column-layout .main-panel .module-content.object:before {
+	content: 'Объект';
+	display: flex;
+	background: #2F4F4F;
+}
+.cms-page .two-column-layout .main-panel .module-content.objectsList:before {
+	content: 'Список объектов';
+	line-height: 1em;
+	font-size: 11px;
+	display: flex;
+	background: #2F4F4F;
+}
+
+.cms-page .two-column-layout .main-panel .module-content.lotsList:before {
+	content: 'Список лотов';
+	line-height: 1em;
+	font-size: 11px;
+	display: flex;
+	background: #4F2F2F;
+}
+
+.cms-page .two-column-layout .main-panel .module-content.lot:before {
+	content: 'Лот';
+	display: flex;
+	background: #4F2F2F;
+}
+
+.discount {
+	color: darkslategray;
+	font-weight: 500;
+	margin-top:5px;
+}

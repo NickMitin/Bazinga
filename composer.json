@@ -1,18 +1,20 @@
 {
-	"name": "tbms/bazinga-cms",
-	"type": "project",
-	"version": "1.0.0",
-	"minimum-stability": "dev",
-	"repositories": [
-		{
-			"type": "git",
-			"url": "http://github.com/NickMitin/Bazinga"
-		}
-	],
-	"require": {
-		"php": ">=5.4.0",
-		"twig/twig": "1.*",
-		"sybio/image-workshop": "dev-master",
-		"tbms/bazinga-lib": "dev-master"
-	}
+  "name": "tbms/bazinga-cms",
+  "type": "project",
+  "version": "1.0.0",
+  "minimum-stability": "dev",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "http://github.com/NickMitin/Bazinga"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "twig/twig": "1.*",
+    "sybio/image-workshop": "dev-master",
+    "tbms/bazinga-lib": "dev-master",
+    "swiftmailer/swiftmailer": "~5.4",
+    "true/punycode": "~2.0"
+  }
 }

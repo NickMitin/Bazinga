@@ -1,0 +1,12 @@
+	{
+	"cssPath": "www/styles/site/",
+	"cssMainFileName": "main",
+	"cssMainMinFileName": "main.min.css",
+	"imagesPath": "www/images/",
+	"jsPath": "www/scripts/site/",
+	"jsSourcePath": "scripts/",
+	"jsInitialSourcePath": "initialScripts/",
+	"jsMainFileName": "main",
+	"sassPath": "sass/",
+	"sassMainFileName": "main.scss"
+}

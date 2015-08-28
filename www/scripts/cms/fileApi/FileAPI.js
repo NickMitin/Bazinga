@@ -196,7 +196,6 @@
 		_on = function (el, type, fn){
 			if( el ){
 				var uid = api.uid(el);
-
 				if( !_elEvents[uid] ){
 					_elEvents[uid] = {};
 				}

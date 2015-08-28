@@ -1,0 +1,65 @@
+server {
+
+	fastcgi_cache_use_stale error timeout invalid_header http_500 http_503;
+
+	listen 80;
+
+	set $root_path '/var/www/html/friday/www';
+	index generator.php;
+
+	server_name master.refriday.ru;
+
+	client_max_body_size 32m;
+
+	root $root_path;
+
+	try_files $uri $uri/ @rewrite;
+
+	location @rewrite {
+		rewrite ^/(.*)$ /generator.php?REQUEST_URI=$1 last;
+	}
+
+	location ~ \.php {
+
+		add_header Access-Control-Allow-Origin *;
+		fastcgi_pass  unix:/var/run/php5-fpm.sock;
+		fastcgi_index /generator.php;
+
+		include fastcgi_params;
+
+		fastcgi_split_path_info       ^(.+\.php)(/.+)$;
+		fastcgi_param PATH_INFO       $fastcgi_path_info;
+		fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param PHP_VALUE error_reporting=6135;
+		fastcgi_param PHP_FLAG display_errors=0;
+		fastcgi_param PHP_FLAG log_errors=1;
+		fastcgi_param PHP_VALUE error_log=/var/log/php.err.log;
+
+		### Cache
+		set $skip_cache 0;
+
+		# Don't cache uris containing the following segments
+		if ($request_uri ~* "/cms/|/admin/|/search/|/.adminer/|/images/content/|/rp/|getViewersCount|/cabinet/") {
+			set $skip_cache 1;
+		}
+
+		fastcgi_cache_key "$scheme$request_method$host$request_uri";
+		fastcgi_cache pagecache;
+		fastcgi_ignore_headers "Cache-Control" "Expires" "Set-Cookie";
+		fastcgi_hide_header Cache-Control;
+		fastcgi_hide_header Expires;
+		fastcgi_hide_header "Pragma";
+
+		fastcgi_cache_valid 200 3m;
+		fastcgi_cache_bypass $skip_cache;
+		fastcgi_no_cache $skip_cache;
+		fastcgi_pass_header Cookie;
+		add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+		add_header Pragma "no-cache";
+		expires -1;
+		add_header Fastcgi-Cache $upstream_cache_status;
+
+
+	}
+}

@@ -1,8 +1,8 @@
 {% if fieldParams.type == 'password' %}
-	<input type="password" class="text password" name="cms-form-item{{ prefix }}[{{ field }}]"/>
+	<input type="password" class="text password" name="cms-form-item{{ prefix }}[{{ field }}]" {% if fieldParams.width %}style="width: {{ fieldParams.width }}"{% endif %}/>
 {% elseif fieldParams.type == 'checkbox' %}
 	<label>
-		<input type="checkbox" name="cms-form-item{{ prefix }}[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} />
+		<input type="checkbox" name="cms-form-item{{ prefix }}[{{ field }}]" value="1" {% if objectData.getProperty(field) %}checked{% endif %} /> {{ fieldParams.title }}
 	</label>
 {% elseif fieldParams.type == 'datetime' %}
 	{# todo заменить универсальным контроллом, или добавить JS-полифилл #}
@@ -15,33 +15,36 @@
 	<textarea name="cms-form-item{{ prefix }}[{{ field }}]">{{ objectData.getProperty(field) }}</textarea>
 {% elseif fieldParams.type == 'custom' %}
 	{% autoescape false %}
-	{{ fieldParams.html }}
+		{{ fieldParams.html }}
 	{% endautoescape %}
 {% elseif fieldParams.type == 'form' %}
 	<div class="courses-list-container">
 		<table class="courses-list">
+			<tr>
+				{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
+					<td class="caption">
+						<div class="caption">{{ fieldParamsChildren.title }}</div>
+					</td>
+				{% endfor %}
+			</tr>
 			{% for object in objectData.getAnonymous(fieldParams.method) %}
 				<tr>
 					{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
-						<td class="caption">
-							<div class="caption">{{ fieldParamsChildren.title }}</div>
-						</td>
-					{% endfor %}
-				</tr>
-				<tr>
-					{% for fieldChildren, fieldParamsChildren in fieldParams.fields %}
 						<td class="field">
-							{% include 'fields/form.twig' with {'field': fieldChildren, 'fieldParams': fieldParamsChildren, 'objectData': object, 'prefix': '[]'}  %}
+							{% include 'fields/form.twig' with {'field': fieldChildren, 'fieldParams': fieldParamsChildren, 'objectData': object, 'prefix': '[]'} %}
 						</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
 		</table>
+		<input type="button" value="Добавить" class="add-new-subform-item" data-object-name="{{ fieldParams.objectName }}">
 	</div>
 {% elseif fieldParams.type == 'relation' %}
 	{% if fieldParams.cardinality == 'one' %}
 		<select class="text" name="cms-form-item-relation{{ prefix }}[{{ field }}]">
-			<option></option>
+			{% if not fieldParams.noEmpty %}
+				<option></option>
+			{% endif %}
 			{% for id,name in fieldParams.items %}
 				<option value="{{ id }}" {% if id in fieldParams.bindedItems %}selected{% endif %}>
 					{{ name }}
@@ -64,6 +67,17 @@
 	{% include 'fields/images.twig' %}
 {% elseif fieldParams.type == 'files' %}
 	{% include 'fields/files.twig' %}
+{% elseif fieldParams.type == 'select' %}
+	<select class="text" name="cms-form-item{{ prefix }}[{{ field }}]">
+		{% if not fieldParams.noEmpty %}
+			<option></option>
+		{% endif %}
+		{% for id,name in fieldParams.options %}
+			<option value="{{ id }}" {% if id == objectData.getProperty(field) %}selected{% endif %}>
+				{{ name }}
+			</option>
+		{% endfor %}
+	</select>
 {% else %}
-	<input type="text" class="text" name="cms-form-item{{ prefix }}[{{ field }}]" value="{{ objectData.getProperty(field) }}"/>
+	<input type="text" class="text" name="cms-form-item{{ prefix }}[{{ field }}]" value="{% if (objectData.getProperty(field)) != '0' or fieldParams.allowZero %}{{ objectData.getProperty(field) }}{% endif %}" {% if fieldParams.width %}style="width: {{ fieldParams.width }}"{% endif %}/>
 {% endif %}

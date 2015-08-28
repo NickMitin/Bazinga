@@ -1,26 +1,8 @@
 {
-	"structure": {
-		"users": {
-			"title": "Пользователи",
-			"icon": "child"
-		},
-		"post-objects": {
-			"title": "Упровление постами",
-			"icon": "bank",
-			"sections": {
-				"posts": {
-					"title": "Посты",
-					"icon": "bank"
-				},
-				"sections": {
-					"title": "Группы",
-					"icon": "sitemap"
-				},
-				"tags": {
-					"title": "Теги",
-					"icon": "sitemap"
-				}
-			}
-		}
-	}
+  "structure": {
+    "users": {
+      "title": "Пользователи",
+      "icon": "child"
+    }
+  }
 }

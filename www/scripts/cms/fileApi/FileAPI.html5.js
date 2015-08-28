@@ -19,6 +19,7 @@
 /*jslint nomen: true, regexp: true */
 /*global window, atob, Blob, ArrayBuffer, Uint8Array */
 
+
 (function (window) {
     'use strict';
     var CanvasPrototype = window.HTMLCanvasElement &&

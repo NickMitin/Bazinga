@@ -3,46 +3,58 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>Bazinga CMS</title>
-	<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700|Open+Sans:400italic,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="/styles/cms/fontawesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="/styles/cms/reset.css"/>
-	<link rel="stylesheet" href="/styles/cms/common.css"/>
-	<link rel="stylesheet" href="/styles/cms/base.css"/>
+	<link rel="stylesheet" href="/styles/cms/common.css?v={{ 'now'|date('d.m.Y.H') }}"/>
+	<link rel="stylesheet" href="/styles/cms/base.css?v={{ 'now'|date('d.m.Y.H') }}"/>
+	<link rel="stylesheet" href="/vendor/fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="/vendor/growl/jquery.growl.css" type="text/css" media="screen"/>
 	{% block cssFile %}{% endblock %}
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="/scripts/cms/cms.js"></script>
+	<script src="/scripts/cms/cms.js?v={{ 'now'|date('d.m.Y.H') }}"></script>
+	<script type="text/javascript" src="/vendor/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
+	<script type="text/javascript" src="/vendor/growl/jquery.growl.js"></script>
+	<script type="text/javascript" src="/vendor/simpleStorage.js"></script>
 	{% block jsFile %}{% endblock %}
 
 </head>
-<body class="cms-page">
-<header>
-	<ul class="top-menu clearfix">
-		{% for sectionName, sectionInfo in cmsStructure %}
-			<li{% if currentPathSections[1] == sectionName %} class="active"{% endif %}>
-				<a href="/cms/{{ sectionName }}/">
-					{% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
-					{{ sectionInfo.title }}
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
-	{% if cmsStructure[currentPathSections[1]].sections %}
-		<ul class="sub-menu clearfix">
-			{% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[1]].sections %}
-				<li {% if currentPathSections[2] == subSectionName %}class="active"{% endif %} >
-					<a href="/cms/{{ currentPathSections[1] }}/{{ subSectionName }}/">
-						{% if subSectionInfo.icon %}<i class="fa fa-fw fa-{{ subSectionInfo.icon }}"></i>{% endif %}
-						{{ subSectionInfo.title }}
-					</a>
-				</li>
-			{% endfor %}
-		</ul>
-	{% endif %}
-</header>
-<div class="module-content">
-	{% block moduleContent %}
-	{% endblock moduleContent %}
-</div>
-</body>
+{% block bodyOuter %}
+	<body class="cms-page">
+	<div class="bg">
+		<header {% if cmsStructure[currentPathSections[1]].sections %}class="has-sub-menu"{% endif %}>
+			<ul class="top-menu clearfix">
+				{% for sectionName, sectionInfo in cmsStructure %}
+					<li{% if currentPathSections[1] == sectionName %} class="active"{% endif %}>
+						<a href="/cms/{{ sectionName }}/">
+							{% if sectionInfo.icon %}<i class="fa fa-fw fa-{{ sectionInfo.icon }}"></i>{% endif %}
+							{{ sectionInfo.title }}
+						</a>
+					</li>
+				{% endfor %}
+			</ul>
+			{% if cmsStructure[currentPathSections[1]].sections %}
+				<ul class="sub-menu clearfix">
+					{% for subSectionName, subSectionInfo in cmsStructure[currentPathSections[1]].sections %}
+						<li {% if currentPathSections[2] == subSectionName %}class="active"{% endif %} >
+							<a href="/cms/{{ currentPathSections[1] }}/{{ subSectionName }}/">
+								{% if subSectionInfo.icon %}
+									<i class="fa fa-fw fa-{{ subSectionInfo.icon }}"></i>{% endif %}
+								{{ subSectionInfo.title }}
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</header>
+		{% block moduleContentOuter %}
+			<div class="module-content">
+				{% block moduleContent %}
+				{% endblock moduleContent %}
+			</div>
+		{% endblock moduleContentOuter %}
+	</div>
+	</body>
+{% endblock bodyOuter %}
 </html>

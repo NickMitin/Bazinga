@@ -1,56 +1,5 @@
 {% extends "_base.twig" %}
-	{% block jsFile %}
-		<script>window.FileAPI = { staticPath: '/scripts/cms/fileApi/' };</script>
-		<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
-		<script src="/scripts/cms/file.js"></script>
-		<script src="/scripts/cms/visual_redactor/ckeditor4.4/ckeditor.js"></script>
-		<script src="/scripts/cms/visual_redactor/jquery/jquery.ui.widget.js"></script>
-		<script src="/scripts/cms/visual_redactor/jquery/jquery.fileupload.js"></script>
-		<script src="/scripts/cms/visual_redactor/jquery/jquery.iframe-transport.js"></script>
-		<script src="/scripts/cms/visual_redactor/js/editor.plugin.js"></script>
-	{% endblock %}
-	{% block cssFile %}
-		<link rel="stylesheet" href="/styles/cms/file.css"/>
-		<link rel="stylesheet" rev="stylesheet" type="text/css" href="/scripts/cms/visual_redactor/css/editor.plugin.css" />
-	{% endblock %}
 	{% block moduleContent %}
-		<div class="cms-module-form">
-			<form id="SaveForm" action="./" enctype="multipart/form-data" method="post">
-				<table>
-					{% if errors %}
-						<tr>
-							<td class="caption red">
-								<div class="caption">Ошибки</div>
-							</td>
-							<td class="field red">
-								{% for key, val in errors %}
-									<p>{{ key }} -> {{ val }}</p>
-								{% endfor %}
-							</td>
-						</tr>
-					{% endif %}
-					{% for field, fieldParams in fields %}
-						<tr>
-							<td class="caption">
-								<div class="caption">{{ fieldParams.title }}</div>
-							</td>
-							<td class="field">
-								{% include 'fields/form.twig' with {'field': field, 'fieldParams': fieldParams, 'prefix': ''}  %}
-							</td>
-						</tr>
-					{% endfor %}
-					<tr>
-						<td></td>
-						<td>
-							<div class="form-buttons">
-								<input type="submit" value="Save"/>
-								{% if cloneMap %}
-									<input type="submit" name="clone-map" value="Clone"/>
-								{% endif %}
-							</div>
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
+		{% include '_formStylesAndScripts.twig' %}
+		{% include '_formContent.twig' %}
 	{% endblock moduleContent %}

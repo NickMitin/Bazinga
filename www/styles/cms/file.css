@@ -1,13 +1,13 @@
 
 .cms-page .form-field-file:hover,
 .cms-page .form-field-image:hover {
-	background: #f1f1f1;
+	background: rgba(255, 210, 90, 0.56)
 }
 
 .cms-page .form-field-file,
 .cms-page .form-field-image {
 	padding: 20px 0;
-	border: 1px dotted #ccc;
+	border: 1px dashed rgba(255, 210, 90, 0.66);
 	text-align: center;
 	cursor: pointer;
 	position: relative;

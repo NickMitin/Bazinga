@@ -1,0 +1,18 @@
+{% extends "_base.twig" %}
+{% block bodyOuter %}
+	<body class="cms-page login-page">
+	<div class="bg">
+		<div class="login-form">
+			<form action="./" method="post">
+				{% if login %}
+					<div class="error">Неверные логин или пароль</div>
+				{% endif %}
+				<input type="hidden" name="back" value="{{ backUrl }}">
+				<input type="text" name="login" value="{{ login }}" placeholder="E-mail" class="text">
+				<input type="password" name="password" placeholder="Пароль" class="text">
+				<input type="submit" value="Knock-knock">
+			</form>
+		</div>
+	</div>
+	</body>
+{% endblock bodyOuter %}

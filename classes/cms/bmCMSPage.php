@@ -14,7 +14,9 @@ abstract class bmCMSPage extends bmHTMLPage
 
 	protected $param1;
 	protected $param2;
+	protected $param3;
 	protected $itemId;
+	protected $cmsModulePath = '/';
 
 
 	use bmFlashSession;
@@ -25,18 +27,41 @@ abstract class bmCMSPage extends bmHTMLPage
 	 */
 	public function __construct($application, $parameters = array())
 	{
-
 		parent::__construct($application, $parameters);
+		if (!$this->isAdminUser() && !($this instanceof bmCMSLoginPage))
+		{
+			header("Location: /cms/login/?back=" . urlencode(join('/', $this->application->generator->pathSections)));
+			exit;
+		}
 
 		$this->initTwig();
 		$this->loadCmsConfig();
-		if (@$this->cmsConfig['structure'][$this->application->generator->pathSections[1]]['sections'] && count($this->application->generator->pathSections) == 2)
-		{
-			header('location: ./' . (array_keys($this->cmsConfig['structure'][$this->application->generator->pathSections[1]]['sections'])[0]) . "/", true);
-		}
 
-		$this->templateVars['cmsStructure'] = $this->cmsConfig['structure'];
-		$this->templateVars['currentPathSections'] = $this->application->generator->pathSections;
+		if (!($this instanceof bmCMSLoginPage))
+		{
+			$this->filterCmsStructureWithPermissions();
+			$pathSections = $this->application->generator->pathSections;
+			if (array_key_exists(1, $pathSections))
+			{
+				$firstLevelConfigElement = $this->cmsConfig['structure'][$pathSections[1]];
+				$this->cmsModulePath = $pathSections[1];
+				if (array_key_exists('sections', $firstLevelConfigElement))
+				{
+					if (array_key_exists(2, $pathSections) && $pathSections[2] && $firstLevelConfigElement['sections'][$pathSections[2]])
+					{
+						$this->cmsModulePath .= '/' . $pathSections[2];
+					}
+
+					if (count($pathSections) == 2)
+					{
+						header('location: ./' . (array_keys($firstLevelConfigElement['sections'])[0]) . "/", true);
+					}
+				}
+			}
+
+			$this->templateVars['cmsStructure'] = $this->cmsConfig['structure'];
+			$this->templateVars['currentPathSections'] = $this->application->generator->pathSections;
+		}
 
 	}
 
@@ -59,14 +84,22 @@ abstract class bmCMSPage extends bmHTMLPage
 		$loader = new Twig_Loader_Filesystem(projectRoot . 'templates/cms');
 		$this->twig = new Twig_Environment(
 			$loader, [
+				'debug' => true,
 				'cache' => C_CACHE_TEMPLATES ? (projectRoot . 'generated/templateCache') : null,
 			]
 		);
+		$this->twig->addExtension(new Twig_Extension_Debug());
 	}
 
+	/**
+	 * @param $moduleConfigPath
+	 *
+	 * @return mixed
+	 */
 	protected function includeConfig($moduleConfigPath)
 	{
 		$lastFoundConfigPath = projectRoot . 'conf/cms/' . $moduleConfigPath . '/module.json';
+
 		return json_decode(file_get_contents($lastFoundConfigPath), true);
 	}
 
@@ -110,6 +143,88 @@ abstract class bmCMSPage extends bmHTMLPage
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
+	protected function isAdminUser()
+	{
+		if ($this->application->user->type >= BM_USER_TYPE_ADMIN)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function checkPermissions()
+	{
+		if ($this->application->user->type >= BM_USER_TYPE_SUPERUSER)
+		{
+			return true;
+		}
+		$acl = $this->application->user->acl ? json_decode($this->application->user->acl, true) : [];
+		if ($acl && array_key_exists($this->cmsModulePath, $acl))
+		{
+			if (!array_key_exists('/', $acl))
+			{
+				return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 *
+	 */
+	protected function filterCmsStructureWithPermissions()
+	{
+		if ($this->application->user->type >= BM_USER_TYPE_SUPERUSER)
+		{
+			return true;
+		}
+		$acl = $this->application->user->acl ? json_decode($this->application->user->acl, true) : [];
+		if (!$acl)
+		{
+			$this->cmsConfig['structure'] = [];
+		}
+		foreach ($this->cmsConfig['structure'] as $sectionName => $data)
+		{
+			if (!array_key_exists($sectionName, $acl))
+			{
+				unset($this->cmsConfig['structure'][$sectionName]);
+			}
+			else
+			{
+				if (array_key_exists('sections', $this->cmsConfig['structure'][$sectionName]))
+				{
+					{
+						foreach ($this->cmsConfig['structure'][$sectionName]['sections'] as $subSectionName => $data)
+						{
+							if (!array_key_exists($sectionName . '/' . $subSectionName, $acl))
+							{
+								unset($this->cmsConfig['structure'][$sectionName]['sections'][$subSectionName]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param $map
+	 * @param $object
+	 * @param null $link
+	 * @param null $parentObject
+	 *
+	 * @return mixed
+	 */
 	private function _recursionCloneObject(&$map, $object, $link = null, $parentObject = null)
 	{
 		$excludeField = ['identifier'];
@@ -147,12 +262,12 @@ abstract class bmCMSPage extends bmHTMLPage
 		// Клонируем связи
 		if ($parentObject)
 		{
-			if($map['dataObject'] == 'image' && $link)
+			if ($map['dataObject'] == 'image' && $link)
 			{
 				$obj = $objectClone ? $objectClone : $object;
 				$obj->addLinkObject($link['object'], $parentObject->identifier, $link['group']);
 			}
-			elseif($map['dataObject'] == 'file' && $link)
+			elseif ($map['dataObject'] == 'file' && $link)
 			{
 				$obj = $objectClone ? $objectClone : $object;
 				$obj->addLinkObject($link['object'], $parentObject->identifier, $link['group']);
@@ -177,11 +292,11 @@ abstract class bmCMSPage extends bmHTMLPage
 		{
 			foreach ($map['children'] as $newMap)
 			{
-				if($newMap['dataObject'] == 'image')
+				if ($newMap['dataObject'] == 'image')
 				{
 					$method = 'getObjectImagesGroups';
 				}
-				elseif($newMap['dataObject'] == 'file')
+				elseif ($newMap['dataObject'] == 'file')
 				{
 					$method = 'getObjectFilesGroups';
 				}
@@ -231,7 +346,10 @@ abstract class bmCMSPage extends bmHTMLPage
 
 	}
 
-	private function _cloneObject ()
+	/**
+	 * @return string
+	 */
+	private function _cloneObject()
 	{
 		$output = new stdClass();
 		$output->id = $this->_recursionCloneObject($this->moduleConfig["cloneMap"], $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId));
@@ -242,8 +360,13 @@ abstract class bmCMSPage extends bmHTMLPage
 	/**
 	 * @return string
 	 */
-	final public function generate()
+	public function generate()
 	{
+		if (!$this->checkPermissions())
+		{
+			return null;
+		}
+
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case "GET":
@@ -280,11 +403,11 @@ abstract class bmCMSPage extends bmHTMLPage
 				{
 					$method = "_" . $_POST['ajaxCms'];
 					unset($_POST['ajaxCms']);
+
 					return $this->$method();
 				}
 				if (array_key_exists('images_file', $_POST))
 				{
-
 					return $this->addImage($_FILES);
 				}
 				elseif (array_key_exists('files_file', $_POST))
@@ -292,22 +415,73 @@ abstract class bmCMSPage extends bmHTMLPage
 
 					return $this->addFiles($_FILES);
 				}
+				elseif (array_key_exists('status', $_POST))
+				{
+					if ($this->itemId)
+					{
+						$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+						if ($object)
+						{
+							$object->{$this->moduleConfig['list']['status']} = 1 - $object->{$this->moduleConfig['list']['status']};
+							$object->save();
+						}
+					}
+					if (method_exists($this, 'onAfterChange'))
+					{
+						$this->onAfterChange();
+					}
+
+					return "ok";
+				}
 				elseif (array_key_exists('event', $_POST) && $_POST['event'] === 'archivesFile')
 				{
 					return $this->archivesFileRestore();
 				}
 				elseif ($this->itemId)
 				{
+					$generate = false;
 					if (method_exists($this, 'generatePOST'))
 					{
-						$generate = $this->generatePOST();
-						if ($generate)
+						$generate = $this->generatePOST($this->itemId);
+						if (method_exists($this, 'onAfterChange'))
 						{
-							return $generate;
+							$this->onAfterChange();
 						}
 					}
-					return $this->saveForm();
+
+					if (!$generate)
+					{
+						$this->saveForm(null);
+						if (method_exists($this, 'onAfterChange'))
+						{
+							$this->onAfterChange();
+						}
+
+						header('location: ./', true);
+						exit;
+					}
+
+
+					return $generate;
+
 				}
+				break;
+			case "DELETE":
+				if ($this->itemId)
+				{
+					$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
+					if ($object)
+					{
+						$object->deleted = 1;
+						$object->save();
+					}
+				}
+				if (method_exists($this, 'onAfterChange'))
+				{
+					$this->onAfterChange();
+				}
+
+				return "ok";
 				break;
 			case "PUT":
 				if (method_exists($this, 'generatePUT'))
@@ -318,11 +492,15 @@ abstract class bmCMSPage extends bmHTMLPage
 						return $generate;
 					}
 				}
+
 				return $this->createObject();
 				break;
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function archivesFileRestore()
 	{
 		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
@@ -334,20 +512,25 @@ abstract class bmCMSPage extends bmHTMLPage
 		switch ($type)
 		{
 			case 'image':
-				$object->deleteObjectImages($group, intval($fileId)); // Удоляем прежню картинку
+				$object->deleteObjectImages($group, intval($fileId)); // Удаляем прежню картинку
 			case 'images':
 				$image = new bmImage($this->application, ['identifier' => intval($fileId)]);
-				$image->deleted = BM_C_DELETE_OBJECT -1;
+				$image->deleted = BM_C_DELETE_OBJECT - 1;
 				break;
 			case 'files':
 				$file = new bmFile($this->application, ['identifier' => intval($fileId)]);
-				$file->deleted = BM_C_DELETE_OBJECT -1;
+				$file->deleted = BM_C_DELETE_OBJECT - 1;
 				break;
 		}
 
 		return ['respons' => true];
 	}
 
+	/**
+	 * @param $files
+	 *
+	 * @return string
+	 */
 	protected function addImage($files)
 	{
 		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
@@ -365,16 +548,35 @@ abstract class bmCMSPage extends bmHTMLPage
 				{
 					$object->deleteObjectImages($_POST['group'], $errors->identifier);
 				}
+
+				$imageField = $this->moduleConfig['form']['fields'][$_POST['group']];
+				if (array_key_exists('sizes', $imageField))
+				{
+					$sizes = array_map('trim', explode(",", trim($imageField['sizes'])));
+					foreach ($sizes as $size)
+					{
+						$errors->getImg($_POST['group'], $size, true);
+					}
+				}
+
+				$this->application->rsync();
+
 				$return = [
-					'url' => $errors->getImg($_POST['group'], '200x200', true),
+					'url' => $errors->getImg($_POST['group'], '80x80', true),
 					'caption' => $errors->caption,
 					'id' => $errors->identifier,
 				];
+
 				return json_encode($return);
 			}
 		}
 	}
 
+	/**
+	 * @param $files
+	 *
+	 * @return string
+	 */
 	protected function addFiles($files)
 	{
 		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
@@ -388,11 +590,14 @@ abstract class bmCMSPage extends bmHTMLPage
 			}
 			elseif ($errors)
 			{
+				$this->application->rsync();
+
 				$return = [
 					'url' => $errors->getFile($_POST['group']),
 					'caption' => $errors->caption,
 					'id' => $errors->identifier,
 				];
+
 				return json_encode($return);
 			}
 		}
@@ -403,12 +608,19 @@ abstract class bmCMSPage extends bmHTMLPage
 	 */
 	protected function displayList()
 	{
+		$this->templateVars['listConfig'] = @$this->moduleConfig['list'];
 		$this->templateVars['columns'] = $this->getFields(@$this->moduleConfig['list']['columns'], $this->moduleConfig);
-		$this->templateVars['objects'] = @$this->application->data->getObjectsByType($this->moduleConfig['dataObject'], [], [], true);
+		$order = @$this->moduleConfig['list']['order'] ?: [];
+		$this->templateVars['objects'] = @$this->application->data->getObjectsByType($this->moduleConfig['dataObject'], [], $order, true);
 
 		return $this->renderTemplate('list.twig', $this->templateVars);
 	}
 
+	/**
+	 * @param $include
+	 *
+	 * @return array
+	 */
 	protected function displayFormNested($include)
 	{
 		$config = $this->includeConfig($include);
@@ -416,23 +628,29 @@ abstract class bmCMSPage extends bmHTMLPage
 			'objectName' => $config['dataObject'],
 			'fields' => $this->getFields(@$config['form']['fields'], $config)
 		];
+
 		return $templateVars;
 	}
 
 
 	/**
+	 * @param string $templateName
 	 *
+	 * @return bool|string
 	 */
-	protected function displayForm()
+	protected function displayForm($templateName = 'form.twig', $form = null)
 	{
-
+		if (!$form)
+		{
+			$form = @$this->moduleConfig['form'];
+		}
 		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
 		if ($object)
 		{
 			$this->templateVars['objectName'] = $this->moduleConfig['dataObject'];
 			$this->templateVars['objectData'] = $object;
 
-			$this->templateVars['fields'] = $this->getFields(@$this->moduleConfig['form']['fields'], $this->moduleConfig);
+			$this->templateVars['fields'] = $this->getFields(@$form['fields'], $this->moduleConfig);
 			foreach ($this->templateVars['fields'] as $field => $fieldInfo)
 			{
 				if ($fieldInfo['type'] == 'custom')
@@ -442,11 +660,15 @@ abstract class bmCMSPage extends bmHTMLPage
 					if (method_exists($this, $method))
 					{
 						$this->templateVars['fields'][$field]['html'] = $this->{$method}($fieldInfo, $object);
-					} elseif (class_exists($class)) {
+					}
+					elseif (class_exists($class))
+					{
 						$class = new $class($fieldInfo, $object);
 						$this->templateVars['fields'][$field]['include'] = $class->template;
 						$this->templateVars['fields'][$field]['params'] = $class->getParams();
-					} else {
+					}
+					else
+					{
 						$this->templateVars['fields'][$field]['html'] = 'не доделали пока :(';
 					}
 				}
@@ -464,7 +686,31 @@ abstract class bmCMSPage extends bmHTMLPage
 					$this->templateVars['fields'][$field]['items'] = [];
 					foreach ($items as $item)
 					{
-						$this->templateVars['fields'][$field]['items'][$item->identifier] = $item->name;
+						$itemArray = $item->toArray();
+						if (!array_key_exists('name', $itemArray))
+						{
+							if ($fieldInfo['name'])
+							{
+								$itemArray['name'] = '';
+								foreach ($fieldInfo['name'] as $fieldToBuildName)
+								{
+									$itemArray['name'] .= (" " . $itemArray[$fieldToBuildName]);
+								}
+								$itemArray['name'] = trim($itemArray['name']);
+							}
+						}
+						$method = 'formElementFilterCallback' . ucfirst($field);
+						if (@$fieldInfo['filterCallback'] && method_exists($this, $method))
+						{
+							if ($this->{$method}($item))
+							{
+								$this->templateVars['fields'][$field]['items'][$item->identifier] = $itemArray['name'];
+							}
+						}
+						else
+						{
+							$this->templateVars['fields'][$field]['items'][$item->identifier] = $itemArray['name'];
+						}
 					}
 
 				}
@@ -477,10 +723,17 @@ abstract class bmCMSPage extends bmHTMLPage
 
 		$this->templateVars['cloneMap'] = array_key_exists('cloneMap', $this->moduleConfig);
 		$this->templateVars['errors'] = $this->getFlash("errors");
+		$this->templateVars['formSaved'] = $this->getFlash('formSaved');
 
-		return $this->renderTemplate('form.twig', $this->templateVars);
+		return $this->renderTemplate($templateName, $this->templateVars);
 	}
 
+	/**
+	 * @param $group
+	 * @param $type
+	 *
+	 * @return bool|string
+	 */
 	protected function archivesFiles($group, $type)
 	{
 
@@ -507,7 +760,7 @@ abstract class bmCMSPage extends bmHTMLPage
 	/**
 	 *
 	 */
-	protected function saveForm()
+	protected function saveForm($redirectTo = "./")
 	{
 		$object = $this->application->data->getObjectById($this->moduleConfig['dataObject'], $this->itemId);
 
@@ -534,6 +787,7 @@ abstract class bmCMSPage extends bmHTMLPage
 							{
 								$imageId = intval($imageId);
 								$imageCaption = $_POST['cms-image-caption'][$value][$key];
+								$imageIsMain = $_POST['cms-image-main'][$value] == $key;
 								$imageIsRemove = intval($_POST['cms-image-remove'][$value][$key]) == 1;
 								$image = new bmImage($this->application, ['identifier' => $imageId]);
 								if ($imageIsRemove)
@@ -543,11 +797,13 @@ abstract class bmCMSPage extends bmHTMLPage
 								else
 								{
 									$image->caption = $imageCaption;
+									$image->isMain = $imageIsMain;
 								}
 							}
 						}
 
 						break;
+					case 'custom':
 					case 'include':
 
 						break;
@@ -587,7 +843,7 @@ abstract class bmCMSPage extends bmHTMLPage
 							if (
 								(is_array($relationsFromForm) && array_key_exists($item->identifier, $relationsFromForm) && $relationsFromForm[$item->identifier])
 								||
-								(intval($relationsFromForm) && intval($relationsFromForm) == $item->identifier)
+								(!is_array($relationsFromForm) && intval($relationsFromForm) && intval($relationsFromForm) == $item->identifier)
 							)
 							{
 								if (!in_array($item->identifier, $bindedItems))
@@ -603,9 +859,11 @@ abstract class bmCMSPage extends bmHTMLPage
 								}
 							}
 						}
+
 						// detect ref table name
 						$variant1 = 'link_' . $this->moduleConfig['dataObject'] . '_' . $fieldInfo['to'];
 						$variant2 = 'link_' . $fieldInfo['to'] . '_' . $this->moduleConfig['dataObject'];
+
 
 						if ($this->application->dataLink->select('SHOW TABLES LIKE "' . $variant1 . '"')->rowCount())
 						{
@@ -636,6 +894,11 @@ abstract class bmCMSPage extends bmHTMLPage
 						}
 
 					default:
+						// Для площади можно вводить дробные значения с точкой и с запятой
+						if ($field == "square")
+						{
+							$value = str_replace(",", ".", $value);
+						}
 						$object->{$field} = trim($value);
 
 				}
@@ -643,11 +906,17 @@ abstract class bmCMSPage extends bmHTMLPage
 				// todo: бежать не по ПОСТу, а по маппингу
 
 			}
+
+			$this->setFlash('formSaved', 'Изменения сохранены');
 		}
 
-		header('location: ./', true);
-		exit;
+		if ($redirectTo != null)
+		{
+			header('location: ' . $redirectTo, true);
+			exit;
+		}
 	}
+
 
 	/**
 	 * @return string
@@ -656,6 +925,7 @@ abstract class bmCMSPage extends bmHTMLPage
 	{
 		$className = 'bm' . ucfirst($this->moduleConfig['dataObject']);
 		$object = new $className($this->application);
+
 		return json_encode(['id' => $object->identifier]);
 	}
 
@@ -734,7 +1004,6 @@ abstract class bmCMSPage extends bmHTMLPage
 
 		}
 	}
-
 
 }
 

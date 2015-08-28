@@ -40,6 +40,10 @@
  *  default = null
  * @property int $type
  *  default = null
+ * @property string $acl
+ *  default = null
+ * @property int $status
+ *  default = null
  *
  */
 final class bmUser extends bmDataObject
@@ -62,6 +66,16 @@ final class bmUser extends bmDataObject
 				),
 				'type' => array(
 					'fieldName' => 'type',
+					'dataType' => BM_VT_INTEGER,
+					'defaultValue' => 0
+				),
+				'acl' => array(
+					'fieldName' => 'acl',
+					'dataType' => BM_VT_TEXT,
+					'defaultValue' => ''
+				),
+				'status' => array(
+					'fieldName' => 'status',
 					'dataType' => BM_VT_INTEGER,
 					'defaultValue' => 0
 				)

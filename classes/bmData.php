@@ -52,17 +52,42 @@ final class bmData extends bmFFData
 	 *
 	 * @param bool $returnAsArray
 	 *
-	 * @return array
+	 * @return bmDataObject[]
 	 */
 	public function getObjectsByType($objectName, $filter = [], $order = [], $returnAsArray = false)
 	{
+		$cacheKey = '';
+		/*		if ($returnAsArray)
+				{
+					$cacheKey = $objectName . "_" . serialize($filter) . "_" . serialize($order) . "_" . intval($returnAsArray);
+					$result = $this->application->cacheLink->get($cacheKey);
+					if ($result)
+					{
+						return $result;
+					}
+				}*/
 		$result = [];
 		$className = 'bm' . ucfirst($objectName);
 		$object = new $className($this->application, array('readonly' => true));
 
 		$fieldsSQL = $object->fieldsToSQL(); //todo: только те поля, которые нужны
 
-		$sql = "SELECT " . $fieldsSQL . " FROM `" . $objectName . "` WHERE deleted = 0 ORDER BY `identifier`";
+		$additionalWhere = "";
+		if ($filter)
+		{
+			$additionalWhere = join(" AND", $filter);
+		}
+		if (count($filter) == 1)
+		{
+			$additionalWhere = " AND " . $additionalWhere;
+		}
+
+		if (is_array($order))
+		{
+			$order = join(", ", $order);
+		}
+		$orderBy = $order ?: "`identifier`";
+		$sql = "SELECT " . $fieldsSQL . " FROM `" . $objectName . "` WHERE deleted = 0 {$additionalWhere} ORDER BY " . $orderBy;
 
 		$qObjects = $this->application->dataLink->select($sql);
 
@@ -73,6 +98,11 @@ final class bmData extends bmFFData
 
 		$qObjects->free();
 
+		if ($cacheKey)
+		{
+			$this->application->cacheLink->set($cacheKey, $result);
+		}
+
 		return $result;
 	}
 
@@ -80,9 +110,10 @@ final class bmData extends bmFFData
 	 * @param $objectName
 	 * @param $id
 	 *
-	 * @return null
+	 * @return null | bmDataObject
 	 */
-	public function getObjectById($objectName, $id) {
+	public function getObjectById($objectName, $id)
+	{
 		/** @var bmDataObject $object */
 		$className = 'bm' . ucfirst($objectName);
 		$object = new $className($this->application, array('readonly' => true));
@@ -95,6 +126,23 @@ final class bmData extends bmFFData
 		}
 
 		return null;
+	}
+
+	/**
+	 * @param $objectName
+	 * @param $field
+	 * @param $value
+	 *
+	 * @return bmDataObject|null
+	 */
+	public function getObjectByField($objectName, $field, $value)
+	{
+		return $this->getObjectById($objectName, $this->application->getObjectIdByFieldName($objectName, $field, $value));
+	}
+
+	public function getObjectByFields($objectName, $fields)
+	{
+		return $this->getObjectById($objectName, $this->application->getObjectIdByFieldNames($objectName, $fields));
 	}
 }
 

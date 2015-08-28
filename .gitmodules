@@ -1,5 +1,5 @@
 [submodule "lib"]
 	path = lib
-	url = https://github.com/NickMitin/FuckFrameworks
+	url = git@github.com:NickMitin/FuckFrameworks
 	
 

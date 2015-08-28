@@ -1,0 +1,14 @@
+{% block jsFile %}
+	<script>window.FileAPI = {staticPath: '/scripts/cms/fileApi/'};</script>
+	<script src="/scripts/cms/fileApi/FileAPI.min.js"></script>
+	<script src="/scripts/cms/file.js"></script>
+	<script src="/scripts/cms/visual_redactor/ckeditor4.4/ckeditor.js"></script>
+	<script src="/scripts/cms/visual_redactor/jquery/jquery.ui.widget.js"></script>
+	<script src="/scripts/cms/visual_redactor/jquery/jquery.fileupload.js"></script>
+	<script src="/scripts/cms/visual_redactor/jquery/jquery.iframe-transport.js"></script>
+	<script src="/scripts/cms/visual_redactor/js/editor.plugin.js"></script>
+{% endblock %}
+	{% block cssFile %}
+		<link rel="stylesheet" href="/styles/cms/file.css"/>
+		<link rel="stylesheet" rev="stylesheet" type="text/css" href="/scripts/cms/visual_redactor/css/editor.plugin.css"/>
+	{% endblock %}

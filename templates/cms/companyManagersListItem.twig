@@ -1,0 +1,14 @@
+<tr data-manager-id="{{ manager.identifier }}">
+	<td>
+		<input type="text" class="text manager-firstname" name="manager[{{ manager.identifier }}][firstName]" value="{{ manager.firstName }}" placeholder="Имя"/>
+	</td>
+	<td>
+		<input type="text" class="text manager-lastname" name="manager[{{ manager.identifier }}][lastName]" value="{{ manager.lastName }}" placeholder="Фамилия"/>
+	</td>
+	<td>
+		<input type="text" class="text manager-phone" name="manager[{{ manager.identifier }}][phone]" value="{{ manager.phone }}" placeholder="Телефон"/>
+	</td>
+	<td>
+		<input type="text" class="text manager-email" name="manager[{{ manager.identifier }}][email]" value="{{ manager.email }}" placeholder="Email"/>
+	</td>
+</tr>

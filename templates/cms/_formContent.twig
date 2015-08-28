@@ -1,0 +1,44 @@
+<div class="cms-module-form">
+	<form id="SaveForm" action="./" enctype="multipart/form-data" method="post" {% if formSaved %}data-form-saved="{{ formSaved }}"{% endif %}>
+		<table>
+			{% if errors %}
+				<tr>
+					<td class="caption red">
+						<div class="caption">Ошибки</div>
+					</td>
+					<td class="field red">
+						{% for key, val in errors %}
+							<p>{{ key }} -> {{ val }}</p>
+						{% endfor %}
+					</td>
+				</tr>
+			{% endif %}
+			{% for field, fieldParams in fields %}
+				<tr data-row-for-field="{{ field }}" data-row-for-object="{{ objectName }}">
+					<td class="caption">
+						{% if fieldParams.type != 'checkbox' %}
+							<div class="caption">{{ fieldParams.title }}</div>
+						{% endif %}
+					</td>
+					<td class="field">
+						{% include 'fields/form.twig' with {'field': field, 'fieldParams': fieldParams, 'prefix': ''} %}
+					</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<td></td>
+				<td>
+					<div class="form-buttons">
+						<input type="submit" value="Сохранить"/>
+						{% if cloneMap %}
+							<input type="submit" name="clone-map" value="Жан Клон"/>
+						{% endif %}
+						{% autoescape false %}
+						{{ additionalButtons }}
+						{% endautoescape %}
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>

@@ -1,0 +1,25 @@
+<div class="courses-list-container">
+	<table class="courses-list">
+		<tbody>
+		<tr>
+			<th>
+				Имя
+			</th>
+			<th>
+				Фамилия
+			</th>
+			<th>
+				Телефон
+			</th>
+			<th>
+				Email
+			</th>
+		</tr>
+		{% for manager in managers %}
+			{% include 'companyManagersListItem.twig' %}
+		{% endfor %}
+		</tbody>
+	</table>
+	<br />
+	<input type="button" value="Добавить менеджера" class="add-new-subform-item" data-object-name="manager">
+</div>

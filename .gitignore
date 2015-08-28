@@ -2,6 +2,8 @@
 .*
 *.zip
 *.*~
+*.pyc
+cabinetDibag.php
 www/images/content/
 www/file/content/
 conf/db_default.conf
@@ -12,4 +14,8 @@ composer.lock
 conf/passwd.conf
 conf/local.conf
 vendor
-composer.lock
+node_modules/
+www/scripts/site/data/
+
+!.gitattributes
+!.gitignore
